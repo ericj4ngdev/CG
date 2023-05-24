@@ -1,0 +1,2 @@
+E:\Github\CG\x64\Debug\CG.exe
+E:\Github\CG\CG_Practice\x64\Debug\CG.exe
