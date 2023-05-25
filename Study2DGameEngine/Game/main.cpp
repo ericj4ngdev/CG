@@ -1,4 +1,4 @@
-#include<glut.h>
+#include <glut.h>
 #include <iostream>
 #include "Include.h"
 
