@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
-    <LibraryPath>E:\Github\CG\Study2DGameEngine\Game\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\Github\CG\Study2DGameEngine\Game\Include;$(ExternalIncludePath)</IncludePath>
+    <LibraryPath>D:\Github\CG\Study2DGameEngine\Game\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Github\CG\Study2DGameEngine\Game\Include;$(ExternalIncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -133,14 +133,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Color4f.cpp" />
     <ClCompile Include="Game\main.cpp" />
     <ClCompile Include="Game\Stage.cpp" />
-    <ClCompile Include="Vector2f.cpp" />
+    <ClCompile Include="Game\Texture.cpp" />
+    <ClCompile Include="Game\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Color4f.h" />
+    <ClInclude Include="Game\Include.h" />
     <ClInclude Include="Game\Stage.h" />
-    <ClInclude Include="Game\Vector2f.h" />
-    <ClInclude Include="Include.h" />
+    <ClInclude Include="Game\Texture.h" />
+    <ClInclude Include="Game\Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

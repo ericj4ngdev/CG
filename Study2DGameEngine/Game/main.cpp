@@ -1,5 +1,8 @@
 #include<glut.h>
-// #include<>
+#include <iostream>
+#include "Include.h"
+
+using namespace std;
 
 void renderScene(void)
 {
@@ -14,6 +17,13 @@ void renderScene(void)
 
 int main(int argc, char** argv)
 {
+
+    Vector2D v1(1, 2), v2(3,4);
+    Vector2D v3 = v1 + v2;
+    v1.getx();
+
+    
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_SINGLE | GLUT_RGBA);
     glutInitWindowPosition(100, 100);

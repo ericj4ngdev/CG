@@ -5,7 +5,10 @@
 #include <math.h>
 #include <stdio.h>
 #include <Windows.h>
-#include <vector>
+
+#include "Vector2D.h"
+#include "Color4f.h"
+
 
 struct ExternStruct 
 {
