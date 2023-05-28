@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
-    <LibraryPath>E:\Github\CG\Study2DGameEngine\Game\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\Github\CG\Study2DGameEngine\Game\Include;$(ExternalIncludePath)</IncludePath>
+    <LibraryPath>C:\CG\Study2DGameEngine\Game\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\CG\Study2DGameEngine\Game\Include;$(ExternalIncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

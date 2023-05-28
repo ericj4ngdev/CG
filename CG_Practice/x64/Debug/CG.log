@@ -1,4 +1,2 @@
 ﻿  Sample_main.cpp
-E:\Github\CG\CG_Practice\Sample_main.cpp(38,17): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-E:\Github\CG\CG_Practice\Sample_main.cpp(76,1): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
-  CG.vcxproj -> E:\Github\CG\CG_Practice\x64\Debug\CG.exe
+  CG.vcxproj -> C:\CG\CG_Practice\x64\Debug\CG.exe

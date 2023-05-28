@@ -1,10 +1,44 @@
-#include <glut.h>
-#include <iostream>
 #include "Include.h"
+WindowSize g_Extern;
 
-using namespace std;
+Stage* mStage = NULL;
+#pragma region mStage
+// mStage 초기화
+void init() {
+    if (mStage == NULL) {
+        mStage = new Stage();
+        mStage->init();
+    }
+}
 
-void renderScene(void)
+// mStage 그리기
+void Render() {
+    if (mStage != NULL) {
+        mStage->Render();
+    }
+}
+
+// mStage 자원 해제
+void Release() {
+    if (mStage != NULL) {
+        mStage->Release();
+        delete mStage;
+        mStage == NULL;
+    }
+}
+
+// mStage 이동
+void FrameMove() {
+    if (mStage != NULL) {
+        mStage->FrameMove();
+    }
+}
+#pragma endregion
+
+
+
+
+void renderScene()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glBegin(GL_TRIANGLES);
@@ -19,10 +53,7 @@ int main(int argc, char** argv)
 {
 
     Vector2D v1(1, 2), v2(3,4);
-    Vector2D v3 = v1 + v2;
-    v1.getx();
-
-    
+    Vector2D v3 = v1 + v2;    
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_SINGLE | GLUT_RGBA);
