@@ -36,7 +36,7 @@ void Stage::Collide() {
 
 void Stage::FrameMove() 
 {
-	int moveSpeed = 5;
+	int moveSpeed = 2;
 	if (KeyDown(VK_LEFT) || KeyDown('A') || KeyDown('a'))
 	{
 		mPlayer.mPos.x -= moveSpeed;
