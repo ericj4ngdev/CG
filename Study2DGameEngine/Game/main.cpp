@@ -6,7 +6,8 @@ Stage* mStage = NULL;
 #pragma region mStage
 // mStage 초기화
 void init() {
-    if (mStage == NULL) {
+    if (mStage == NULL) 
+    {
         mStage = new Stage();
         mStage->init();
     }
@@ -36,6 +37,7 @@ void FrameMove() {
 }
 #pragma endregion
 
+// 각 sprite 의 render와 move 담당
 void display() {
     FrameMove();
 
@@ -86,7 +88,7 @@ int main(int argc, char** argv)
     glutCreateWindow("GAME");
 
     glEnable(GL_TEXTURE_2D);
-    // init();
+    init();
     glutDisplayFunc(display);
     // int atexit(void (*func)(void));
     // 프로그램 종료하면 자원 해재 함수 Release함수 호출

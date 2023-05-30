@@ -6,13 +6,26 @@ void Sprite::init()
 	mSize = Vector2D(100, 100);
 	m_Texid = NULL;
 	mColor = Color4f(1, 1, 1, 1);
+
+	loadTexture();
+}
+
+void Sprite::loadTexture()
+{
+	// 텍스처 로드 및 생성
+	glGenTextures(1, &m_Texid); // 텍스처 식별자 생성
+	glBindTexture(GL_TEXTURE_2D, m_Texid); // 생성한 텍스처를 바인딩하여 설정
+
+	// 텍스처 매개변수 설정
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
 void Sprite::Release()
 {
 	if (m_Texid != NULL)
 	{
-		m_Tex.Release();
+		// m_Tex.Release();
 	}
 }
 
@@ -70,13 +83,18 @@ void Sprite::DrawBox(float size)
 void Sprite::Render() 
 {
 	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
-	glBindTexture(GL_TEXTURE_2D, m_Texid);		// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
-	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);		// 현재의 색상을 설정하는 함수
-	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
-	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
-	glTranslatef((mSize.x / 2) + mPos.x, g_Extern.WINDOWSIZE_HEIGHT - mPos.y - (mSize.y / 2), 0);	  // 좌표의 중심으로 이동
-	glScalef(-mSize.x, mSize.y, 1);
-	// DrawBox(2);
-	glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, m_Texid);		// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
+
+			glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);		// 현재의 색상을 설정하는 함수
+
+			glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
+			glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
+
+			glTranslatef((mSize.x / 2) + mPos.x, g_Extern.WINDOWSIZE_HEIGHT - mPos.y - (mSize.y / 2), 0);	  // 좌표의 중심으로 이동
+			glScalef(-mSize.x, mSize.y, 1);
+
+			DrawBox(1);
+
+		glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
 	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
 }

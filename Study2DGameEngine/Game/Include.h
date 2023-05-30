@@ -10,7 +10,7 @@
 #include "glut.h"
 #include "Vector2D.h"
 #include "Color4f.h"
-#include "Texture.h"
+// #include "Texture.h"
 #include "Sprite.h"
 
 #include "Stage.h"
