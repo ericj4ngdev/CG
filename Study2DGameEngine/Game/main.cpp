@@ -29,6 +29,12 @@ void Release() {
     }
 }
 
+void Collide() {
+    if (mStage != NULL) {
+        mStage->Collide();
+    }
+}
+
 // mStage 이동
 void FrameMove() {
     if (mStage != NULL) {
@@ -40,7 +46,7 @@ void FrameMove() {
 // 각 sprite 의 render와 move 담당
 void display() {
     FrameMove();
-
+    Collide();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -64,17 +70,6 @@ void onIdle()
 
     display();
     Sleep(1000.0f / 60.0f);
-}
-
-void renderScene()
-{
-    glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_TRIANGLES);
-        glVertex3f(-0.5, -0.5, 0.0);
-        glVertex3f(0.5, 0.0, 0.0);
-        glVertex3f(0.0, 0.5, 0.0);
-    glEnd();
-    glFlush();
 }
 
 int main(int argc, char** argv)

@@ -12,36 +12,48 @@ Stage::~Stage()
 
 void Stage::init() 
 {
-	m_Sprite.init();
+	mPlayer.init();
+	mGround.init(1);
 }
 
 void Stage::Release() 
 {
-	m_Sprite.Release();
+	mPlayer.Release();
+	mGround.Release();
 }
 
 void Stage::Render() {
-	m_Sprite.Render();
+	mPlayer.Render();
+	mGround.Render(1);
 }
 
-void Stage::FrameMove() {
+void Stage::Collide() {
+	if (mPlayer.Collide(mGround)) {
+		mPlayer.mColor = Color4f(1, 0, 1, 1);
+	}
+	else mPlayer.mColor = Color4f(1, 1, 1, 1);
+}
+
+void Stage::FrameMove() 
+{
+	int moveSpeed = 5;
 	if (KeyDown(VK_LEFT) || KeyDown('A') || KeyDown('a'))
 	{
-		m_Sprite.mPos.x--;
+		mPlayer.mPos.x -= moveSpeed;
 	}
 
 	if (KeyDown(VK_RIGHT) || KeyDown('D') || KeyDown('d'))
 	{
-		m_Sprite.mPos.x++;
+		mPlayer.mPos.x += moveSpeed;
 	}
 
 	if (KeyDown(VK_UP) || KeyDown('W') || KeyDown('w'))
 	{
-		m_Sprite.mPos.y--;
+		mPlayer.mPos.y -= moveSpeed;
 	}
 
 	if (KeyDown(VK_DOWN) || KeyDown('S') || KeyDown('s'))
 	{
-		m_Sprite.mPos.y++;
+		mPlayer.mPos.y += moveSpeed;
 	}
 }
