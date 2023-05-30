@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
-    <LibraryPath>C:\CG\Study2DGameEngine\Game\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\CG\Study2DGameEngine\Game\Include;$(ExternalIncludePath)</IncludePath>
+    <LibraryPath>C:\CG\Study2DGameEngine\Game\lib;C:\CG\Study2DGameEngine\Game\Freeimage;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\CG\Study2DGameEngine\Game\Include;$(ExternalIncludePath);C:\CG\Study2DGameEngine\Game\Freeimage</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,7 +113,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glut32.lib;freeglut.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;glut32.lib;freeglut.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

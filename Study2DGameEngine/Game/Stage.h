@@ -7,7 +7,7 @@ private:
 	Sprite m_Sprite;
 public:
 	Stage();
-	~Stage();
+	virtual ~Stage();
 
 	// 위에 세 개는 Sprite에 있는 함수 그대로 가져옴
 	void init();
