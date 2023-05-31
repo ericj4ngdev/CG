@@ -6,6 +6,7 @@ class Stage
 private:
 	Player mPlayer;
 	Ground mGround;
+
 public:
 	Stage();
 	virtual ~Stage();

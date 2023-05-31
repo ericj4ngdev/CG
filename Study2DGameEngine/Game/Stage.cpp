@@ -27,12 +27,16 @@ void Stage::Render() {
 	mGround.Render();
 }
 
-void Stage::Collide() {
+void Stage::Collide() 
+{
 	if (mPlayer.Collide(mGround)) 
 	{
 		mPlayer.mColor = Color4f(1, 0, 1, 1);
 	}
 	else mPlayer.mColor = Color4f(1, 1, 1, 1);
+
+	// ¶¥ Ã¼Å©
+	mPlayer.IsGround(mGround);
 }
 
 void Stage::FrameMove() 

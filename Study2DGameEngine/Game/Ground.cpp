@@ -2,7 +2,7 @@
 
 void Ground::init()
 {
-	mPos = Vector2D(400, 50);
+	mPos = Vector2D(350, 50);
 	mSize = Vector2D(600, 50);
 	m_Texid = NULL;
 	mColor = Color4f(0, 0, 0, 1);

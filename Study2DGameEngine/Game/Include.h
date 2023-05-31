@@ -3,9 +3,10 @@
 #define O_H_
 
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
 #include <Windows.h>
+#include <vector>
 
 #include "glut.h"
 #include "Vector2D.h"

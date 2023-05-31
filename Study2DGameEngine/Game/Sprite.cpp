@@ -20,20 +20,6 @@ void Sprite::Release()
 	}
 }
 
-bool Sprite::Collide(Sprite& other)
-{
-	// 축 검사해서 겹치면 
-	// bottom > other.top (일반 좌표)
-	if ((mPos.x + mSize.x / 2 >= other.mPos.x - other.mSize.x / 2)
-		&& (mPos.x - mSize.x / 2 <= other.mPos.x + other.mSize.x / 2)
-		&& (mPos.y + mSize.y / 2 >= g_Extern.WINDOWSIZE_HEIGHT - (other.mPos.y + other.mSize.y / 2))
-		&& (mPos.y - mSize.y / 2 <= g_Extern.WINDOWSIZE_HEIGHT - (other.mPos.y - other.mSize.y / 2)))
-	{
-		return true;
-	}
-	return false; // 충돌 하지 않음.
-}
-
 void Sprite::DrawBox(float size)
 {
 	// 6개 면의 법선벡터

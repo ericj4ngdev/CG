@@ -1,8 +1,2 @@
-﻿  Ground.cpp
-  Player.cpp
-  Sprite.cpp
-  Stage.cpp
-  main.cpp
-C:\CG\Study2DGameEngine\Game\main.cpp(28,16): warning C4553: '==': 식의 결과가 사용되지 않습니다. '='을(를) 의도했습니까?
-  코드를 생성하고 있습니다...
+﻿  main.cpp
   Study2DGameEngine.vcxproj -> C:\CG\Study2DGameEngine\x64\Debug\Study2DGameEngine.exe

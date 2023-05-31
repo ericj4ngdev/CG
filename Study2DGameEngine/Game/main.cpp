@@ -25,7 +25,7 @@ void Release() {
     if (mStage != NULL) {
         mStage->Release();
         delete mStage;
-        mStage == NULL;
+        mStage = NULL;
     }
 }
 
@@ -44,9 +44,10 @@ void FrameMove() {
 #pragma endregion
 
 // 각 sprite 의 render와 move 담당
+// 매 프레임마다 호출되는 함수로 update같다고 보면 된다. 
 void display() {
-    FrameMove();
     Collide();
+    FrameMove();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -75,8 +76,8 @@ void onIdle()
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
-    g_Extern.WINDOWSIZE_WIDTH = 600;
-    g_Extern.WINDOWSIZE_HEIGHT = 400;
+    g_Extern.WINDOWSIZE_WIDTH = 800;
+    g_Extern.WINDOWSIZE_HEIGHT = 500;
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(g_Extern.WINDOWSIZE_WIDTH, g_Extern.WINDOWSIZE_HEIGHT);
