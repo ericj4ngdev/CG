@@ -1,25 +1,5 @@
 #include "Include.h"
 
-void Sprite::init() 
-{
-	mPos = Vector2D(0, 0);		// 초기위치
-	mSize = Vector2D(100, 100);
-	m_Texid = NULL;
-	mColor = Color4f(1, 1, 1, 1);
-
-	loadTexture();
-}
-
-void Sprite::init(int yt)
-{
-	mPos = Vector2D(400, 50);
-	mSize = Vector2D(600, 50);
-	m_Texid = NULL;
-	mColor = Color4f(0, 0, 0, 1);
-
-	loadTexture();
-}
-
 void Sprite::loadTexture()
 {
 	// 텍스처 로드 및 생성
@@ -43,9 +23,10 @@ void Sprite::Release()
 bool Sprite::Collide(Sprite& other)
 {
 	// 축 검사해서 겹치면 
+	// bottom > other.top (일반 좌표)
 	if ((mPos.x + mSize.x / 2 >= other.mPos.x - other.mSize.x / 2)
 		&& (mPos.x - mSize.x / 2 <= other.mPos.x + other.mSize.x / 2)
-		&& (mPos.y + mSize.y / 2 >= g_Extern.WINDOWSIZE_HEIGHT - (other.mPos.y + other.mSize.y / 2))	// bottom > other.top (일반 좌표)
+		&& (mPos.y + mSize.y / 2 >= g_Extern.WINDOWSIZE_HEIGHT - (other.mPos.y + other.mSize.y / 2))
 		&& (mPos.y - mSize.y / 2 <= g_Extern.WINDOWSIZE_HEIGHT - (other.mPos.y - other.mSize.y / 2)))
 	{
 		return true;
@@ -103,51 +84,3 @@ void Sprite::DrawBox(float size)
 		glEnd();
 	}
 }
-
-// player 전용 render함수 
-void Sprite::Render() 
-{
-	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
-		glBindTexture(GL_TEXTURE_2D, m_Texid);		// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
-
-			glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);		// 현재의 색상을 설정하는 함수
-
-			glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
-			glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
-
-			// 좌표의 중심으로 이동
-			// 좌측 상단 
-			// glTranslatef((mSize.x / 2) + mPos.x, g_Extern.WINDOWSIZE_HEIGHT - mPos.y - (mSize.y / 2), 0);
-			// 정중앙 기준, 시작은 좌측 상단
-			glTranslatef(mPos.x, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
-			glScalef(-mSize.x, mSize.y, 1);
-			// if(this->Collide())
-
-			// Collide(other)
-
-			DrawBox(1);
-
-		glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
-	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
-}
-
-// ground 전용 render함수 
-void Sprite::Render(int x)
-{
-	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
-	glBindTexture(GL_TEXTURE_2D, m_Texid);		// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
-
-	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);		// 현재의 색상을 설정하는 함수
-
-	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
-	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
-
-	glTranslatef(mPos.x, mPos.y, 0);	  // 창 하단
-	glScalef(mSize.x, mSize.y, 1);	// 창 하단 다 채우기
-
-	DrawBox(1);
-
-	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
-	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
-}
-

@@ -4,8 +4,8 @@
 class Stage
 {
 private:
-	Sprite mPlayer;
-	Sprite mGround;
+	Player mPlayer;
+	Ground mGround;
 public:
 	Stage();
 	virtual ~Stage();

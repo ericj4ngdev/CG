@@ -134,7 +134,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game\Color4f.cpp" />
+    <ClCompile Include="Game\Ground.cpp" />
     <ClCompile Include="Game\main.cpp" />
+    <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\Sprite.cpp" />
     <ClCompile Include="Game\Stage.cpp" />
     <ClCompile Include="Game\Texture.cpp" />
@@ -142,7 +144,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Color4f.h" />
+    <ClInclude Include="Game\Ground.h" />
     <ClInclude Include="Game\Include.h" />
+    <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\Sprite.h" />
     <ClInclude Include="Game\Stage.h" />
     <ClInclude Include="Game\Texture.h" />

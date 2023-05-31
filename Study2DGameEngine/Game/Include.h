@@ -12,7 +12,8 @@
 #include "Color4f.h"
 // #include "Texture.h"
 #include "Sprite.h"
-
+#include "Player.h"
+#include "Ground.h"
 #include "Stage.h"
 
 // 외부 참조 구조체 g_Extern 선언
