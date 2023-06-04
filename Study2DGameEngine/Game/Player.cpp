@@ -20,10 +20,19 @@ void Player::Render()
 	Right = mPos.x + mSize.x / 2;
 	Left = mPos.x - mSize.x / 2;
 
-	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
-	glBindTexture(GL_TEXTURE_2D, m_Texid);		// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
+	vTL = Vector2D(Top, Left);
+	vTR = Vector2D(Top, Right);
+	vBR = Vector2D(Bottom, Right);
+	vBL = Vector2D(Bottom, Left);
 
-	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);		// 현재의 색상을 설정하는 함수
+
+
+	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
+	glBindTexture(GL_TEXTURE_2D, m_Texid);		
+	// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
+
+	// 현재의 색상을 설정하는 함수
+	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);		
 
 	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
 	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
@@ -59,14 +68,19 @@ bool Player::Collide(Sprite& other)
 	return false; // 충돌 하지 않음.
 }
 
+bool Player::CollidebyVector(Sprite& other)
+{
+	if (true)
+	{
+		return true;
+	}
+	return false; // 충돌 하지 않음.
+}
+
+
 void Player::Move() 
 {
-	if (OnGround)		// 땅이면
-		mVelo.y = 0.0f;
-	else               // 땅이 아니면 
-	{
-		mPos.y += gravity;
-	}
+  
 
 	if (KeyDown(VK_LEFT) || KeyDown('A') || KeyDown('a'))
 	{
