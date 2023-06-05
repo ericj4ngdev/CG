@@ -27,6 +27,11 @@ void Stage::Render() {
 	mGround.Render();
 }
 
+void Stage::Transform() {
+	mPlayer.Transform();
+	mGround.Transform();
+}
+
 void Stage::Collide() 
 {
 	if (mPlayer.Collide(mGround)) 
@@ -37,6 +42,7 @@ void Stage::Collide()
 
 	// ¶¥ Ã¼Å©
 	mPlayer.IsGround(mGround);
+	mPlayer.CollidebyVector(mGround);
 }
 
 void Stage::FrameMove() 

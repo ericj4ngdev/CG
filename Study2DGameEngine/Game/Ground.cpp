@@ -2,14 +2,30 @@
 
 void Ground::init()
 {
-	mPos = Vector2D(350, 50);
-	mSize = Vector2D(600, 50);
+	mPos = Vector2D(300, 100);
+	mSize = Vector2D(100, 100);
 	m_Texid = NULL;
 	mColor = Color4f(0, 0, 0, 1);
 
 	loadTexture();
 }
 
+void Ground::Transform()
+{
+	Top = mPos.y - mSize.y / 2;
+	Bottom = mPos.y + mSize.y / 2;
+	Right = mPos.x + mSize.x / 2;
+	Left = mPos.x - mSize.x / 2;
+
+	vLT = Vector2D(Left, Top);
+	vRT = Vector2D(Right, Top);
+	vRB = Vector2D(Right, Bottom);
+	vLB = Vector2D(Left, Bottom);
+}
+void Ground::Render(int num) 
+{
+	
+}
 void Ground::Render()
 {
 	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수

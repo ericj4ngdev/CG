@@ -1,7 +1,7 @@
 #include "Include.h"
 
 void Player::init() {
-	mPos = Vector2D(100, 0);		// 초기위치
+	mPos = Vector2D(300, 0);		// 초기위치
 	mVelo = Vector2D(2, 2);
 	mSize = Vector2D(100, 100);
 	m_Texid = NULL;
@@ -9,24 +9,25 @@ void Player::init() {
 	gravity = 4;
 	OnGround = false;
 	JumpPower = 100;
-
+	MoveSpeed = 2.0f;
 	loadTexture();
 }
 
-void Player::Render()
+void Player::Transform()
 {
 	Top = mPos.y - mSize.y / 2;
 	Bottom = mPos.y + mSize.y / 2;
 	Right = mPos.x + mSize.x / 2;
 	Left = mPos.x - mSize.x / 2;
 
-	vTL = Vector2D(Top, Left);
-	vTR = Vector2D(Top, Right);
-	vBR = Vector2D(Bottom, Right);
-	vBL = Vector2D(Bottom, Left);
+	vLT = Vector2D(Left, Top);
+	vRT = Vector2D(Right, Top);
+	vRB = Vector2D(Right, Bottom);
+	vLB = Vector2D(Left, Bottom);
+}
 
-
-
+void Player::Render()
+{
 	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
 	glBindTexture(GL_TEXTURE_2D, m_Texid);		
 	// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
@@ -70,8 +71,48 @@ bool Player::Collide(Sprite& other)
 
 bool Player::CollidebyVector(Sprite& other)
 {
-	if (true)
+	// 두 선 
+	float t, s = 0;
+	float num1, den1;
+	float num2, den2;
+	Vector2D g1 = other.vLT;
+	Vector2D g2 = other.vRT;
+	Vector2D c1 = mPos;
+	Vector2D c2 = other.mPos;
+	Vector2D p1 = vLB;
+	Vector2D p2 = vRB;
+	Vector2D Gcrosspoint;
+	Vector2D Pcrosspoint;
+	num1 = ((c1.x - g1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - g1.y));
+	den1 = ((g2.x - g1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (g2.y - g1.y));
+
+	num2 = ((c1.x - p1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - p1.y));
+	den2 = ((p2.x - p1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (p2.y - p1.y));
+
+	std::cout << num1 << "  " << den1 << '\n';
+	t = num1 / den1;
+	s = num2 / den2;
+	//p1.print(); std::cout << '\n';
+	//p2.print(); std::cout << '\n';
+	std::cout << t << '\n';
+
+	// printf(t);
+	// std::cout << t;
+
+	Gcrosspoint = g1 * (1 - t) + g2 * t;
+	Pcrosspoint = p1 * (1 - s) + p2 * s;
+
+	// 방향 = ohter의 선분에 수직
+	// 크기 = 침범한 점 ~ 충돌지점
+	// 근데 침범했는지 안했는지 어캐 아나...
+	
+	if (OnGround)
 	{
+		// mPos.y -= Bottom - crosspoint.y;
+		mPos = Gcrosspoint - c2 ;// -Pcrosspoint);
+		gravity = 0;
+		// 방향 : (crosspoint - p4); 위로 방향
+		// 크기 : (crosspoint - bottom)
 		return true;
 	}
 	return false; // 충돌 하지 않음.
@@ -80,7 +121,15 @@ bool Player::CollidebyVector(Sprite& other)
 
 void Player::Move() 
 {
-  
+	// if (OnGround)		// 땅이면
+	// 	mVelo.y = 0.0f;
+	// else               // 땅이 아니면 
+	// {
+	// 	mPos.y += gravity;
+	// }
+	
+	mPos.y += gravity;
+	
 
 	if (KeyDown(VK_LEFT) || KeyDown('A') || KeyDown('a'))
 	{
@@ -93,15 +142,20 @@ void Player::Move()
 	}
 
 	// OnGround 조건 &&로 추가 
-	if ((KeyDown(VK_UP) || KeyDown('W') || KeyDown('w')) && OnGround)
+	// if ((KeyDown(VK_UP) || KeyDown('W') || KeyDown('w')) && OnGround)
+	// {
+	// 	mPos.y -= JumpPower;
+	// }
+
+	if ((KeyDown(VK_UP) || KeyDown('W') || KeyDown('w')))
 	{
-		mPos.y -= JumpPower;
+		mPos.y -= mVelo.y;
 	}
 
-	// if (KeyDown(VK_DOWN) || KeyDown('S') || KeyDown('s'))
-	// {
-	// 		mPos.y += mVelo.y;
-	// }
+	if (KeyDown(VK_DOWN) || KeyDown('S') || KeyDown('s'))
+	{
+		mPos.y += mVelo.y;
+	}
 }
 
 void Player::IsGround(Sprite& other) {

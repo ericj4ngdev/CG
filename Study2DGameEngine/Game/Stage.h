@@ -14,6 +14,7 @@ public:
 	void init();
 	void Release();
 	void Render();
+	void Transform();
 	void FrameMove();		// 움직임 추가
 	void Collide();
 	

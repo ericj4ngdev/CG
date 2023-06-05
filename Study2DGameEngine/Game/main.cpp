@@ -19,6 +19,12 @@ void Render() {
         mStage->Render();
     }
 }
+// 위치 정보 갱신
+void Transform() {
+    if (mStage != NULL) {
+        mStage->Transform();
+    }
+}
 
 // mStage 자원 해제
 void Release() {
@@ -46,6 +52,7 @@ void FrameMove() {
 // 각 sprite 의 render와 move 담당
 // 매 프레임마다 호출되는 함수로 update같다고 보면 된다. 
 void display() {
+    Transform();
     Collide();
     FrameMove();
     glEnable(GL_BLEND);
