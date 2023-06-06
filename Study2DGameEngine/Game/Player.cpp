@@ -8,6 +8,7 @@ void Player::init() {
 	mColor = Color4f(1, 1, 1, 1);
 	gravity = 4;
 	OnGround = false;
+	OnCollide = false;
 	JumpPower = 100;
 	MoveSpeed = 2.0f;
 	loadTexture();
@@ -59,64 +60,92 @@ bool Player::Collide(Sprite& other)
 	// 축 검사해서 겹치면 
 	// bottom > other.top (일반 좌표)
 	// 실시간이라 변수로 계산 X
-	if ((Right >= other.mPos.x - other.mSize.x / 2)
-		&& (Left <= other.mPos.x + other.mSize.x / 2)
-		&& (Bottom >= g_Extern.WINDOWSIZE_HEIGHT - (other.mPos.y + other.mSize.y / 2))
-		&& (Top <= g_Extern.WINDOWSIZE_HEIGHT - (other.mPos.y - other.mSize.y / 2)))
+	if ((Right >= other.Left)
+		&& (Left <= other.Right)
+		&& (Bottom >= other.Top)
+		&& (Top <= other.Bottom))
 	{
+		OnCollide = true;
 		return true;
 	}
+	OnCollide = false;
 	return false; // 충돌 하지 않음.
 }
 
 bool Player::CollidebyVector(Sprite& other)
 {
-	// 두 선 
-	float t, s = 0;
+	float t = 0;
+	float p = 0;
 	float num1, den1;
 	float num2, den2;
+
 	Vector2D g1 = other.vLT;
 	Vector2D g2 = other.vRT;
+	Vector2D g3 = other.vRB;
+	Vector2D g4 = other.vLB;
+
 	Vector2D c1 = mPos;
 	Vector2D c2 = other.mPos;
-	Vector2D p1 = vLB;
-	Vector2D p2 = vRB;
+	
+	Vector2D p1 = vLT;
+	Vector2D p2 = vRT;
+	Vector2D p3 = vRB;
+	Vector2D p4 = vLB;
+
 	Vector2D Gcrosspoint;
 	Vector2D Pcrosspoint;
+
+	// Gcrosspoint
 	num1 = ((c1.x - g1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - g1.y));
 	den1 = ((g2.x - g1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (g2.y - g1.y));
-
-	num2 = ((c1.x - p1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - p1.y));
-	den2 = ((p2.x - p1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (p2.y - p1.y));
-
-	std::cout << num1 << "  " << den1 << '\n';
 	t = num1 / den1;
-	s = num2 / den2;
-	//p1.print(); std::cout << '\n';
-	//p2.print(); std::cout << '\n';
-	std::cout << t << '\n';
-
-	// printf(t);
-	// std::cout << t;
-
 	Gcrosspoint = g1 * (1 - t) + g2 * t;
-	Pcrosspoint = p1 * (1 - s) + p2 * s;
+	
+	// Pcrosspoint
+	num2 = ((c1.x - p4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - p4.y));
+	den2 = ((p3.x - p4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (p3.y - p4.y));
+	p = num2 / den2;
+	Pcrosspoint = p4 * (1 - p) + p3 * p;
 
-	// 방향 = ohter의 선분에 수직
-	// 크기 = 침범한 점 ~ 충돌지점
-	// 근데 침범했는지 안했는지 어캐 아나...
+	// Gcrosspoint.print(); std::cout << '\n';
+	// Pcrosspoint.print(); std::cout << '\n';
+	// (Gcrosspoint - Pcrosspoint).print(); std::cout << '\n';
 	
 	if (OnGround)
 	{
-		// mPos.y -= Bottom - crosspoint.y;
-		mPos = Gcrosspoint - c2 ;// -Pcrosspoint);
-		gravity = 0;
+		mPos.y += (Gcrosspoint - Pcrosspoint).y - gravity;
+		// gravity = 0;
 		// 방향 : (crosspoint - p4); 위로 방향
 		// 크기 : (crosspoint - bottom)
 		return true;
 	}
 	return false; // 충돌 하지 않음.
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="v1"></param> ground
+/// <param name="v2"></param> ground
+/// <param name="v3"></param> player
+/// <param name="v4"></param> player
+//void Player::cal(Vector2D v1, Vector2D v2, Vector2D v3, Vector2D v4) 
+//{
+//	float num1, den1;
+//	float num2, den2;
+//	Vector2D c1 = mPos;
+//	Vector2D c2 = other.mPos;
+//
+//	num1 = ((c1.x - v1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - v1.y));
+//	den1 = ((v2.x - v1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (v2.y - v1.y));
+//	t = num1 / den1;
+//	Gcrosspoint = g1 * (1 - t) + g2 * t;
+//
+//	// Pcrosspoint
+//	num2 = ((c1.x - p4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - p4.y));
+//	den2 = ((p3.x - p4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (p3.y - p4.y));
+//	p = num2 / den2;
+//	Pcrosspoint = p4 * (1 - p) + p3 * p;
+//}
 
 
 void Player::Move() 
@@ -128,7 +157,7 @@ void Player::Move()
 	// 	mPos.y += gravity;
 	// }
 	
-	mPos.y += gravity;
+	// mPos.y += gravity;
 	
 
 	if (KeyDown(VK_LEFT) || KeyDown('A') || KeyDown('a'))
@@ -160,8 +189,8 @@ void Player::Move()
 
 void Player::IsGround(Sprite& other) {
 	// player 바닥이 다른 sprite의 Top과 맞닿으면 y축 속도는 0이 된다. 
-	if((- Bottom + (g_Extern.WINDOWSIZE_HEIGHT - (other.mPos.y + other.mSize.y / 2)) <= 0.1)
-		&& (Right > (other.mPos.x - other.mSize.x / 2))
-		&& (Left < (other.mPos.x + other.mSize.x / 2))) OnGround = true;
+	if((other.Top - Bottom <= 0.001f)
+		&& (Right > other.Left
+		&& (Left < other.Right))) OnGround = true;
 	else OnGround = false;
 }

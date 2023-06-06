@@ -34,15 +34,15 @@ void Stage::Transform() {
 
 void Stage::Collide() 
 {
-	if (mPlayer.Collide(mGround)) 
-	{
-		mPlayer.mColor = Color4f(1, 0, 1, 1);
-	}
-	else mPlayer.mColor = Color4f(1, 1, 1, 1);
-
+	// if (mPlayer.Collide(mGround)) 
+	// {
+	// 	mPlayer.mColor = Color4f(1, 0, 1, 1);
+	// }
+	// else mPlayer.mColor = Color4f(1, 1, 1, 1);
+	mGround.CollidebyVector(mPlayer);
 	// ¶¥ Ã¼Å©
-	mPlayer.IsGround(mGround);
-	mPlayer.CollidebyVector(mGround);
+	// mPlayer.IsGround(mGround);
+	// mPlayer.CollidebyVector(mGround);
 }
 
 void Stage::FrameMove() 

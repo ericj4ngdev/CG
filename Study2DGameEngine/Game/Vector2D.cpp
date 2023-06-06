@@ -22,6 +22,11 @@ Vector2D Vector2D::dot (const Vector2D& v) const
 {
 	return Vector2D(x * v.x, y * v.y);
 }
+
+double Vector2D::cross(const Vector2D& other) const {
+	return x * other.y - y * other.x;
+}
+
 Vector2D Vector2D::operator/ (const Vector2D& v) const
 {
 	return Vector2D(x / v.x, y + v.y);
