@@ -3,7 +3,7 @@
 void Player::init() {
 	mPos = Vector2D(300, 0);		// 초기위치
 	mVelo = Vector2D(2, 2);
-	mSize = Vector2D(100, 100);
+	mSize = Vector2D(50, 50);
 	m_Texid = NULL;
 	mColor = Color4f(1, 1, 1, 1);
 	gravity = 4;
@@ -157,7 +157,7 @@ void Player::Move()
 	// 	mPos.y += gravity;
 	// }
 	
-	// mPos.y += gravity;
+	mPos.y += gravity;
 	
 
 	if (KeyDown(VK_LEFT) || KeyDown('A') || KeyDown('a'))
@@ -181,10 +181,10 @@ void Player::Move()
 		mPos.y -= mVelo.y;
 	}
 
-	if (KeyDown(VK_DOWN) || KeyDown('S') || KeyDown('s'))
-	{
-		mPos.y += mVelo.y;
-	}
+	// if (KeyDown(VK_DOWN) || KeyDown('S') || KeyDown('s'))
+	// {
+	// 		mPos.y += mVelo.y;
+	// }
 }
 
 void Player::IsGround(Sprite& other) {

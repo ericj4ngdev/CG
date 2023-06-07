@@ -2,8 +2,8 @@
 
 void Ground::init()
 {
-	mPos = Vector2D(300, 300);
-	mSize = Vector2D(100, 100);
+	// mPos = Vector2D(300, 300);
+	mSize = Vector2D(50, 50);
 	m_Texid = NULL;
 	mColor = Color4f(0, 0, 0, 1);
 	OnCollide = false;
@@ -44,10 +44,6 @@ void Ground::Render()
 
 bool Ground::CollidebyVector(Sprite& other)
 {
-	float g = 0;
-	float p = 0;
-	float num1, den1;
-	float num2, den2;
 	OnCollide = Collide(other);
 
 	Vector2D o1 = other.vLT;
@@ -65,42 +61,32 @@ bool Ground::CollidebyVector(Sprite& other)
 
 	Vector2D Ocrosspoint;
 	Vector2D Gcrosspoint;
+	Vector2D PushVector;
 
 	// Ocrosspoint
 	cal(o1, o2, c1, c2, Ocrosspoint);
 	cal(o2, o3, c1, c2, Ocrosspoint);
 	cal(o3, o4, c1, c2, Ocrosspoint);
 	cal(o4, o1, c1, c2, Ocrosspoint);
-	// num1 = ((c1.x - o1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - o1.y));
-	// den1 = ((o2.x - o1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (o2.y - o1.y));
-	// g = num1 / den1;
-	// if (g <= 1 && g >= 0) 
-	// {
-	// 	Gcrosspoint = o1 * (1 - g) + o2 * g;
-	// }
 
 	// Gcrosspoint
 	cal(g1, g2, c1, c2, Gcrosspoint);
 	cal(g2, g3, c1, c2, Gcrosspoint);
 	cal(g3, g4, c1, c2, Gcrosspoint);
 	cal(g4, g1, c1, c2, Gcrosspoint);
-	// num2 = ((c1.x - g4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - g4.y));
-	// den2 = ((g3.x - g4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (g3.y - g4.y));
-	// p = num2 / den2;
-	// Gcrosspoint = g4 * (1 - p) + g3 * p;
 
-	Gcrosspoint.print(); std::cout << '\n';
-	Ocrosspoint.print(); std::cout << '\n';
-	(Gcrosspoint - Ocrosspoint).print(); std::cout << '\n';
+	PushVector = Gcrosspoint - Ocrosspoint;
+	
+	// Gcrosspoint.print(); std::cout << '\n';
+	// Ocrosspoint.print(); std::cout << '\n';
+	// PushVector.print(); std::cout << '\n';
 
 	if (OnCollide)
 	{
-		other.mPos += Ocrosspoint - Gcrosspoint;
-		// other.mPos += (Gcrosspoint - Pcrosspoint);
-		// 
-		// gravity = 0;
-		// 방향 : (crosspoint - p4); 위로 방향
-		// 크기 : (crosspoint - bottom)
+		if(fabs(PushVector.x) > fabs(PushVector.y))
+			other.mPos.x += PushVector.x;
+		else
+			other.mPos.y += PushVector.y - 4;		// 4는 player의 gravity이다. 
 		return true;
 	}
 	return false; // 충돌 하지 않음.
@@ -126,24 +112,24 @@ void Ground::cal(Vector2D v1, Vector2D v2, Vector2D v3, Vector2D v4, Vector2D& c
 {
 	float num, den;
 	float t;
-	double ab = ccw(v1, v2, v3) * ccw(v1, v2, v4);
-	double cd = ccw(v3, v4, v1) * ccw(v3, v4, v2);
+	float ab = ccw(v1, v2, v3) * ccw(v1, v2, v4);
+	float cd = ccw(v3, v4, v1) * ccw(v3, v4, v2);
 
 	num = ((v3.x - v1.x) * (v4.y - v3.y)) - ((v4.x - v3.x) * (v3.y - v1.y));
 	den = ((v2.x - v1.x) * (v4.y - v3.y)) - ((v4.x - v3.x) * (v2.y - v1.y));
 	t = num / den;
 	if (t <= 1 && t > 0 && ab <= 0 && cd <= 0)
 	{
-		std::cout << t;
+		// std::cout << t;
 		cross = v1 * (1 - t) + v2 * t;
 	}
 }
 
-double Ground::ccw(Vector2D a, Vector2D b) {
+float Ground::ccw(Vector2D a, Vector2D b) {
 	return a.cross(b);
 }
 
-double Ground::ccw(Vector2D p, Vector2D a, Vector2D b) {
+float Ground::ccw(Vector2D p, Vector2D a, Vector2D b) {
 	return ccw(a - p, b - p);
 }
 

@@ -1,8 +1,4 @@
 ﻿  Ground.cpp
-C:\CG\Study2DGameEngine\Game\Ground.cpp(49,8): warning C4101: 'num1' :참조되지 않은 지역 변수입니다.
-C:\CG\Study2DGameEngine\Game\Ground.cpp(50,8): warning C4101: 'num2' :참조되지 않은 지역 변수입니다.
-C:\CG\Study2DGameEngine\Game\Ground.cpp(49,14): warning C4101: 'den1' :참조되지 않은 지역 변수입니다.
-C:\CG\Study2DGameEngine\Game\Ground.cpp(50,14): warning C4101: 'den2' :참조되지 않은 지역 변수입니다.
   Player.cpp
   Sprite.cpp
   Stage.cpp

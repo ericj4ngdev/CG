@@ -5,7 +5,16 @@ class Stage
 {
 private:
 	Player mPlayer;
-	Ground mGround;
+	Ground mGround1;
+	Ground mGround2;
+	Ground mGround3;
+	Ground mGround4;
+	Ground mGround5;
+	Ground mPlatform1;
+	Ground mPlatform2;
+	Ground mPlatform3;
+	Ground mPlatform4;
+	std::vector<Ground> arrground;
 
 public:
 	Stage();

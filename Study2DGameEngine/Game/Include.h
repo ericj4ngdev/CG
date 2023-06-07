@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <vector>
-#include<iostream>
+#include <iostream>
 
 #include "glut.h"
 #include "Vector2D.h"
