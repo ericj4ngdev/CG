@@ -3,6 +3,7 @@ WindowSize g_Extern;
 
 Stage* mStage = NULL;
 
+
 #pragma region mStage
 // mStage √ ±‚»≠
 void init() {
@@ -79,6 +80,8 @@ void onIdle()
     display();
     Sleep(1000.0f / 60.0f);
 }
+
+
 
 int main(int argc, char** argv)
 {

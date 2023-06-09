@@ -5,13 +5,14 @@
 // #include "Include/glut.h"
 #pragma comment(lib,"glut32.lib") 
 
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <cmath>
 #include <stdio.h>
-#include <Windows.h>
+#include <windows.h>
 #include <vector>
 #include <iostream>
 #include <string>
+
 
 #include "glut.h"
 #include "Vector2D.h"

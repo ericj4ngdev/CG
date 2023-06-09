@@ -1,9 +1,10 @@
 #include "Include.h"
+DWORD startTime = 0; // 시작 시간을 저장하는 변수
 
 void Player::init() {
 	mPos = Vector2D(300, 0);		// 초기위치
 	mVelo = Vector2D(2, 2);
-	mSize = Vector2D(50, 50);
+	mSize = Vector2D(50, 100);
 	m_Texid = NULL;
 	mColor = Color4f(1, 1, 1, 1);
 	gravity = 4;
@@ -11,6 +12,7 @@ void Player::init() {
 	OnCollide = false;
 	JumpPower = 100;
 	MoveSpeed = 2.0f;
+	isAttack = false;
 	loadTexture();
 }
 
@@ -27,6 +29,8 @@ void Player::Transform()
 	vLB = Vector2D(Left, Bottom);
 }
 
+
+
 void Player::Render()
 {
 	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
@@ -39,20 +43,24 @@ void Player::Render()
 	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
 	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
 
-	// 좌표의 중심으로 이동
-	// 좌측 상단 
-	// glTranslatef((mSize.x / 2) + mPos.x, g_Extern.WINDOWSIZE_HEIGHT - mPos.y - (mSize.y / 2), 0);
-	// 정중앙 기준, 시작은 좌측 상단
 	glTranslatef(mPos.x, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
 	glScalef(-mSize.x, mSize.y, 1);
-	// if(this->Collide())
-
-	// Collide(other)
 
 	DrawBox(1);
 
 	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
 	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
+
+	if (isAttack) {
+		DWORD currentTime = GetTickCount64(); // 현재 시간 측정
+
+		// 경과 시간이 0.25초가 되면 사각형 그리기 중단
+		if ((currentTime - startTime) >= 250)
+			isAttack = false;
+
+		Attack();
+	}
+
 }
 
 bool Player::Collide(Sprite other)
@@ -75,41 +83,53 @@ bool Player::Collide(Sprite other)
 
 void Player::Move()
 {
-	// if (OnGround)		// 땅이면
-	// 	mVelo.y = 0.0f;
-	// else               // 땅이 아니면 
-	// {
-	// 	mPos.y += gravity;
-	// }
-
 	mPos.y += gravity;
 
-
-	if (KeyDown(VK_LEFT) || KeyDown('A') || KeyDown('a'))
+	if (KeyDown(VK_LEFT))
 	{
 		mPos.x -= mVelo.x;
 	}
 
-	if (KeyDown(VK_RIGHT) || KeyDown('D') || KeyDown('d'))
+	if (KeyDown(VK_RIGHT))
 	{
 		mPos.x += mVelo.x;
 	}
 
-	// OnGround 조건 &&로 추가 
-	// if ((KeyDown(VK_UP) || KeyDown('W') || KeyDown('w')) && OnGround)
-	// {
-	// 	mPos.y -= JumpPower;
-	// }
-
-	if ((KeyDown(VK_UP) || KeyDown('W') || KeyDown('w')))
+	if (KeyDown(VK_UP))
 	{
 		mPos.y -= mVelo.y;
 	}
 
-	// if (KeyDown(VK_DOWN) || KeyDown('S') || KeyDown('s'))
-	// {
-	// 		mPos.y += mVelo.y;
-	// }
+	if (KeyDown('Z') || KeyDown('z'))
+	{
+		isAttack = true;
+	}
+
+	if (KeyDown(VK_DOWN))
+	{
+		glScalef(mSize.x, mSize.y / 2, 1);
+	}
+}
+
+void Player::Attack() 
+{
+	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
+	glBindTexture(GL_TEXTURE_2D, m_Texid);
+	// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
+
+	// 현재의 색상을 설정하는 함수
+	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);
+
+	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
+	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
+
+	glTranslatef(mPos.x + 150, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
+	glScalef(-mSize.x * 4, mSize.y / 4, 1);
+
+	DrawBox(1);
+
+	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
+	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
 }
 
 void Player::IsGround(Sprite& other) {

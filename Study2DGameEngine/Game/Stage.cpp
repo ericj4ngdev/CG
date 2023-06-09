@@ -15,17 +15,17 @@ void Stage::init()
 	
 	for (int i = 0; i < 14; i++)
 	{
-		arrground[i].SetmPos(100 + i * 50, 500);
+		arrground[i].SetmPos(i * 50, 500);
 		arrground[i].init();
 	}
 	for (int i = 0; i < 8; i++)
 	{
-		arrPlatform1[i].SetmPos(150 + i * 50, 350);
+		arrPlatform1[i].SetmPos(150 + i * 50, 300);
 		arrPlatform1[i].init();
 	}
 	for (int i = 0; i < 10; i++)
 	{
-		arrPlatform2[i].SetmPos(230 + i * 50, 200);
+		arrPlatform2[i].SetmPos(230 + i * 50, 100);
 		arrPlatform2[i].init();
 	}
 

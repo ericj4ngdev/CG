@@ -1,78 +1,83 @@
-#include <GL/glut.h>
 #include <iostream>
-#include <string>
+#include <cmath>
+#include <GL/glut.h>
+#include <windows.h> // GetTickCount64 함수 사용을 위해 필요
 
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
+DWORD startTime; // 시작 시간 저장 변수
+bool drawRectangle = false; // 사각형 그리기 상태 변수
 
-std::string FormatTime(int seconds) {
-    int hours = seconds / 3600; seconds %= 3600;
-    int minutes = seconds / 60; seconds %= 60;
-
-    std::string time;
-    time += (hours < 10 ? "0" : "") + std::to_string(hours) + ":";
-    time += (minutes < 10 ? "0" : "") + std::to_string(minutes) + ":";
-    time += (seconds < 10 ? "0" : "") + std::to_string(seconds);
-    return time;
+// 키 입력함수
+static int KeyDown(int vk)
+{
+    return ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0);
 }
 
-void TimeCalculation() {
-    float crntFrame = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
-    deltaTime = crntFrame - lastFrame;
-    lastFrame = crntFrame;
+static int KeyUp(int vk)
+{
+    return ((GetAsyncKeyState(vk) & 0x8000) ? 0 : 1);
+}
 
-    // Calculate time in frames
-    int timeNow = (int)round(crntFrame * 60);
 
-    // Format and render time
-    std::string formattedTime = FormatTime(timeNow);
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glRasterPos2f(10.0f, 10.0f); // Adjust the values as needed
-    for (char c : formattedTime) {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+void init()
+{
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, 500, 0, 500);
+}
+
+void drawRect(float size)
+{
+    glBegin(GL_QUADS);
+    glVertex2f(0, 0);
+    glVertex2f(size, 0);
+    glVertex2f(size, size);
+    glVertex2f(0, size);
+    glEnd();
+}
+
+void specialFunc()
+{
+    if (KeyDown('Z') || KeyDown('z'))
+    {
+        startTime = GetTickCount64(); // 시작 시간 저장
+        drawRectangle = true;
     }
 }
 
-void renderScene()
+void render()
 {
-    // Render background
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    specialFunc();
+
     glClear(GL_COLOR_BUFFER_BIT);
-
-    // Reset transformations
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0, 640, 0, 480); // Adjust the values as needed
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // Time calculation
-    TimeCalculation();    
+    if (drawRectangle) {
+        DWORD currentTime = GetTickCount64(); // 현재 시간 측정
 
-    // Swap buffers
+        // 경과 시간이 3초가 되면 사각형 그리기 중단
+        if ((currentTime - startTime) >= 250)
+            drawRectangle = false;
+
+        drawRect(100);
+    }
+
     glutSwapBuffers();
 }
 
-void update(int value)
-{
-    // Call the render function
-    renderScene();
-    std::cout << deltaTime << " \n";
-    // Register the next update
-    glutTimerFunc(16, update, 0);
-}
 
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowSize(480, 480);
-    glutCreateWindow("Simple OpenGL Window");
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(500, 500);
+    glutCreateWindow("3-Second Rectangle");
 
-    glutDisplayFunc(renderScene);
-    glutTimerFunc(0, update, 0);
-    
+    init();
+
+    glutDisplayFunc(render);
+    glutIdleFunc(render);
     glutMainLoop();
 
     return 0;
