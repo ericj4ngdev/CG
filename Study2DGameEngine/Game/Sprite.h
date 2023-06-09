@@ -19,7 +19,8 @@ public:
 	Vector2D vLB;	
 
 public : 
-	// Sprite(float x, float y) : mPos(x, y) {}
+	Sprite(){};
+	virtual ~Sprite() {};
 	void virtual init() {};				// 초기화
 	void virtual Render() {};			// 그리기
 	void virtual Transform() {};		// 실시간 위치 정보
