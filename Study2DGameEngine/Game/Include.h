@@ -21,6 +21,7 @@
 #include "Player.h"
 #include "Ground.h"
 #include "Stage.h"
+#include "Enemy.h"
 
 
 // 외부 참조 구조체 g_Extern 선언

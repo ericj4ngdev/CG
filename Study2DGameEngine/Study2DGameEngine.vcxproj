@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game\Color4f.cpp" />
+    <ClCompile Include="Game\Enemy.cpp" />
     <ClCompile Include="Game\Ground.cpp" />
     <ClCompile Include="Game\main.cpp" />
     <ClCompile Include="Game\Player.cpp" />
@@ -143,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Color4f.h" />
+    <ClInclude Include="Game\Enemy.h" />
     <ClInclude Include="Game\Ground.h" />
     <ClInclude Include="Game\Include.h" />
     <ClInclude Include="Game\Player.h" />

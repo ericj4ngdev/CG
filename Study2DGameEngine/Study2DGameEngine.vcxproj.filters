@@ -31,6 +31,9 @@
     <Filter Include="소스 파일\Ground">
       <UniqueIdentifier>{cb7aab62-3245-4587-aba1-3f7210ef4324}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Enemy">
+      <UniqueIdentifier>{aba2791e-0029-477d-a6a0-eadf7ddf8c59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\main.cpp">
@@ -54,6 +57,9 @@
     <ClCompile Include="Game\Ground.cpp">
       <Filter>소스 파일\Ground</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Enemy.cpp">
+      <Filter>소스 파일\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Color4f.h">
@@ -76,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="Game\Include.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Enemy.h">
+      <Filter>소스 파일\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

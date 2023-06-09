@@ -1,84 +1,91 @@
-#include <iostream>
-#include <cmath>
 #include <GL/glut.h>
-#include <windows.h> // GetTickCount64 함수 사용을 위해 필요
 
-DWORD startTime; // 시작 시간 저장 변수
-bool drawRectangle = false; // 사각형 그리기 상태 변수
+// 카메라 변수
+float cameraX = 0.0f;
+float cameraY = 0.0f;
 
-// 키 입력함수
-static int KeyDown(int vk)
-{
-    return ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0);
-}
+// 화면 크기
+int screenWidth = 800;
+int screenHeight = 600;
 
-static int KeyUp(int vk)
-{
-    return ((GetAsyncKeyState(vk) & 0x8000) ? 0 : 1);
-}
+// 사각형 위치
+float rectangleX = 100.0f;
+float rectangleY = 100.0f;
 
+void drawRectangle(float x, float y, float width, float height) {
+    glPushMatrix();
+    glTranslatef(x, y, 0.0f);
+    glScalef(width, height, 1.0f);
 
-void init()
-{
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0, 500, 0, 500);
-}
-
-void drawRect(float size)
-{
     glBegin(GL_QUADS);
-    glVertex2f(0, 0);
-    glVertex2f(size, 0);
-    glVertex2f(size, size);
-    glVertex2f(0, size);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(1.0f, 0.0f);
+    glVertex2f(1.0f, 1.0f);
+    glVertex2f(0.0f, 1.0f);
     glEnd();
+
+    glPopMatrix();
 }
 
-void specialFunc()
-{
-    if (KeyDown('Z') || KeyDown('z'))
-    {
-        startTime = GetTickCount64(); // 시작 시간 저장
-        drawRectangle = true;
-    }
-}
-
-void render()
-{
-    specialFunc();
-
+void display() {
     glClear(GL_COLOR_BUFFER_BIT);
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    if (drawRectangle) {
-        DWORD currentTime = GetTickCount64(); // 현재 시간 측정
+    // 카메라 위치로 이동
+    glTranslatef(-cameraX, -cameraY, 0.0f);
 
-        // 경과 시간이 3초가 되면 사각형 그리기 중단
-        if ((currentTime - startTime) >= 250)
-            drawRectangle = false;
-
-        drawRect(100);
+    // 카메라 범위 안에서만 사각형 그리기
+    if (rectangleX > cameraX - screenWidth / 2 && rectangleX < cameraX + screenWidth / 2 &&
+        rectangleY > cameraY - screenHeight / 2 && rectangleY < cameraY + screenHeight / 2) {
+        drawRectangle(rectangleX, rectangleY, 100.0f, 100.0f);
     }
 
-    glutSwapBuffers();
+    glFlush();
 }
 
+void reshape(int width, int height) {
+    screenWidth = width;
+    screenHeight = height;
 
-int main(int argc, char** argv)
-{
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-width / 2, width / 2, -height / 2, height / 2, -1.0, 1.0);
+}
+
+void keyboard(unsigned char key, int x, int y) {
+    switch (key) {
+    case 'w':
+        cameraY += 10.0f;
+        break;
+    case 's':
+        cameraY -= 10.0f;
+        break;
+    case 'a':
+        cameraX -= 10.0f;
+        break;
+    case 'd':
+        cameraX += 10.0f;
+        break;
+    }
+
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(500, 500);
-    glutCreateWindow("3-Second Rectangle");
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(screenWidth, screenHeight);
+    glutCreateWindow("2D Camera Example");
 
-    init();
-
-    glutDisplayFunc(render);
-    glutIdleFunc(render);
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glutKeyboardFunc(keyboard);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    
     glutMainLoop();
-
     return 0;
 }

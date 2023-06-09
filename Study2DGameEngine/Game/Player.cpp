@@ -80,7 +80,6 @@ bool Player::Collide(Sprite other)
 	return false; // 충돌 하지 않음.
 }
 
-
 void Player::Move()
 {
 	mPos.y += gravity;
