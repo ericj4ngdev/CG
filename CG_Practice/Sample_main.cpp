@@ -1,58 +1,79 @@
 #include <GL/glut.h>
+#include <iostream>
+#include <string>
 
-GLuint textureID; // 텍스처 식별자
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
 
-void loadTexture()
-{
-    // 텍스처 로드 및 생성
-    glGenTextures(1, &textureID); // 텍스처 식별자 생성
-    glBindTexture(GL_TEXTURE_2D, textureID); // 생성한 텍스처를 바인딩하여 설정
+std::string FormatTime(int seconds) {
+    int hours = seconds / 3600; seconds %= 3600;
+    int minutes = seconds / 60; seconds %= 60;
 
-    // 텍스처 매개변수 설정
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    std::string time;
+    time += (hours < 10 ? "0" : "") + std::to_string(hours) + ":";
+    time += (minutes < 10 ? "0" : "") + std::to_string(minutes) + ":";
+    time += (seconds < 10 ? "0" : "") + std::to_string(seconds);
+    return time;
+}
 
-    // 이미지 데이터 로드
-    // ...
+void TimeCalculation() {
+    float crntFrame = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
+    deltaTime = crntFrame - lastFrame;
+    lastFrame = crntFrame;
 
-    // 텍스처 데이터 설정
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+    // Calculate time in frames
+    int timeNow = (int)round(crntFrame * 60);
+
+    // Format and render time
+    std::string formattedTime = FormatTime(timeNow);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glRasterPos2f(10.0f, 10.0f); // Adjust the values as needed
+    for (char c : formattedTime) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+    }
 }
 
 void renderScene()
 {
+    // Render background
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    // Reset transformations
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, 640, 0, 480); // Adjust the values as needed
+
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // 사각형 이동
-    glTranslatef(0.5f, 0.5f, 0.0f);
+    // Time calculation
+    TimeCalculation();    
 
-    // 텍스처 바인딩
-    glBindTexture(GL_TEXTURE_2D, textureID);
+    // Swap buffers
+    glutSwapBuffers();
+}
 
-    // 사각형 그리기
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f);    glVertex3f(-0.5f, -0.5f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);    glVertex3f(0.5f, -0.5f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f);    glVertex3f(0.5f, 0.5f, 0.0f);
-    glTexCoord2f(0.0f, 1.0f);    glVertex3f(-0.5f, 0.5f, 0.0f);
-    glEnd();
-
-    glFlush();
+void update(int value)
+{
+    // Call the render function
+    renderScene();
+    std::cout << deltaTime << " \n";
+    // Register the next update
+    glutTimerFunc(16, update, 0);
 }
 
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(500, 500);
-    glutCreateWindow("Texture Example");
-
-    // 텍스처 로드 및 생성
-    loadTexture();
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    glutInitWindowSize(480, 480);
+    glutCreateWindow("Simple OpenGL Window");
 
     glutDisplayFunc(renderScene);
-
+    glutTimerFunc(0, update, 0);
+    
     glutMainLoop();
+
     return 0;
 }

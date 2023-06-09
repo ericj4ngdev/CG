@@ -2,10 +2,6 @@
 
 Stage::Stage() 
 {
-	for (int i = 0; i < arrground.size(); i++)
-	{
-		// arrground.push_back();
-	}
 }
 
 Stage::~Stage() 
@@ -83,6 +79,16 @@ void Stage::Collide()
 	mPlatform1.CollidebyVector(mPlayer);
 	mPlatform2.CollidebyVector(mPlayer);
 	mPlatform3.CollidebyVector(mPlayer);
+	// ¶¥ Ã¼Å©
+	// mPlayer.IsGround(mGround1);
+	// mPlayer.IsGround(mGround2);
+	// mPlayer.IsGround(mGround3);
+	// mPlayer.IsGround(mGround4);
+	// mPlayer.IsGround(mGround5);
+	// mPlayer.IsGround(mPlatform1);
+	// mPlayer.IsGround(mPlatform2);
+	// mPlayer.IsGround(mPlatform3);
+
 }
 
 
@@ -91,11 +97,10 @@ void Stage::Collide()
 	// 	mPlayer.mColor = Color4f(1, 0, 1, 1);
 	// }
 	// else mPlayer.mColor = Color4f(1, 1, 1, 1);
-	// ¶¥ Ã¼Å©
-	// mPlayer.IsGround(mGround);
+	
 	// mPlayer.CollidebyVector(mGround);
 
-void Stage::FrameMove() 
+void Stage::FrameMove()
 {
 	mPlayer.Move();
 }

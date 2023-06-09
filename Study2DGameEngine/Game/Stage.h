@@ -14,7 +14,7 @@ private:
 	Ground mPlatform2;
 	Ground mPlatform3;
 	Ground mPlatform4;
-	std::vector<Ground> arrground;
+	// std::vector<Ground> arrground;
 
 public:
 	Stage();

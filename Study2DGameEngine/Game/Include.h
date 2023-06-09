@@ -2,21 +2,25 @@
 #ifndef O_H_
 #define O_H_
 
+// #include "Include/glut.h"
+#pragma comment(lib,"glut32.lib") 
+
 #include <stdlib.h>
 #include <cmath>
 #include <stdio.h>
 #include <Windows.h>
 #include <vector>
 #include <iostream>
+#include <string>
 
 #include "glut.h"
 #include "Vector2D.h"
 #include "Color4f.h"
-// #include "Texture.h"
 #include "Sprite.h"
 #include "Player.h"
 #include "Ground.h"
 #include "Stage.h"
+
 
 // 외부 참조 구조체 g_Extern 선언
 // 외부 소스파일에서 접근 시, extern 키워드와 함께 사용.

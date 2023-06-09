@@ -23,7 +23,7 @@ public :
 	void virtual init() {};				// 초기화
 	void virtual Render() {};			// 그리기
 	void virtual Transform() {};		// 실시간 위치 정보
-	bool virtual Collide(Sprite& other) { return false; };
+	bool virtual Collide(Sprite other) { return false; };
 	void SetmPos(float x, float y) { mPos = Vector2D(x, y); };
 	void loadTexture();			// 텍스쳐 로드
 	void Release();				// sprite관련 자원 해제

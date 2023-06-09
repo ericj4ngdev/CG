@@ -9,7 +9,7 @@ public:
 	void init() override;
 	void Transform() override;
 	void Render() override;
-	bool Collide(Sprite& other);
+	bool Collide(Sprite other);
 	bool CollidebyVector(Sprite& other);
 	float ccw(Vector2D a, Vector2D b);
 	void cal(Vector2D v1, Vector2D v2, Vector2D v3, Vector2D v4, Vector2D& cross);

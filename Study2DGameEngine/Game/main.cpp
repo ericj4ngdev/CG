@@ -6,7 +6,7 @@ Stage* mStage = NULL;
 #pragma region mStage
 // mStage ÃÊ±âÈ­
 void init() {
-    if (mStage == NULL) 
+    if (mStage == NULL)
     {
         mStage = new Stage();
         mStage->init();

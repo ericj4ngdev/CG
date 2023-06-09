@@ -76,23 +76,25 @@ bool Ground::CollidebyVector(Sprite& other)
 	cal(g4, g1, c1, c2, Gcrosspoint);
 
 	PushVector = Gcrosspoint - Ocrosspoint;
-	
+
 	// Gcrosspoint.print(); std::cout << '\n';
 	// Ocrosspoint.print(); std::cout << '\n';
 	// PushVector.print(); std::cout << '\n';
 
 	if (OnCollide)
 	{
-		if(fabs(PushVector.x) > fabs(PushVector.y))
+		if (fabs(PushVector.x) > fabs(PushVector.y))
 			other.mPos.x += PushVector.x;
 		else
 			other.mPos.y += PushVector.y - 4;		// 4는 player의 gravity이다. 
+
+		other.Transform();
 		return true;
 	}
 	return false; // 충돌 하지 않음.
 }
 
-bool Ground::Collide(Sprite& other)
+bool Ground::Collide(Sprite other)
 {
 	// 축 검사해서 겹치면 
 	// bottom > other.top (일반 좌표)
@@ -134,7 +136,7 @@ float Ground::ccw(Vector2D p, Vector2D a, Vector2D b) {
 }
 
 
-void Ground::Render(int num) 
+void Ground::Render(int num)
 {
-	
+
 }

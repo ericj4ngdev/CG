@@ -30,11 +30,11 @@ void Player::Transform()
 void Player::Render()
 {
 	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
-	glBindTexture(GL_TEXTURE_2D, m_Texid);		
+	glBindTexture(GL_TEXTURE_2D, m_Texid);
 	// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
 
 	// 현재의 색상을 설정하는 함수
-	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);		
+	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);
 
 	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
 	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
@@ -55,7 +55,7 @@ void Player::Render()
 	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
 }
 
-bool Player::Collide(Sprite& other)
+bool Player::Collide(Sprite other)
 {
 	// 축 검사해서 겹치면 
 	// bottom > other.top (일반 좌표)
@@ -72,83 +72,8 @@ bool Player::Collide(Sprite& other)
 	return false; // 충돌 하지 않음.
 }
 
-bool Player::CollidebyVector(Sprite& other)
-{
-	float t = 0;
-	float p = 0;
-	float num1, den1;
-	float num2, den2;
 
-	Vector2D g1 = other.vLT;
-	Vector2D g2 = other.vRT;
-	Vector2D g3 = other.vRB;
-	Vector2D g4 = other.vLB;
-
-	Vector2D c1 = mPos;
-	Vector2D c2 = other.mPos;
-	
-	Vector2D p1 = vLT;
-	Vector2D p2 = vRT;
-	Vector2D p3 = vRB;
-	Vector2D p4 = vLB;
-
-	Vector2D Gcrosspoint;
-	Vector2D Pcrosspoint;
-
-	// Gcrosspoint
-	num1 = ((c1.x - g1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - g1.y));
-	den1 = ((g2.x - g1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (g2.y - g1.y));
-	t = num1 / den1;
-	Gcrosspoint = g1 * (1 - t) + g2 * t;
-	
-	// Pcrosspoint
-	num2 = ((c1.x - p4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - p4.y));
-	den2 = ((p3.x - p4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (p3.y - p4.y));
-	p = num2 / den2;
-	Pcrosspoint = p4 * (1 - p) + p3 * p;
-
-	// Gcrosspoint.print(); std::cout << '\n';
-	// Pcrosspoint.print(); std::cout << '\n';
-	// (Gcrosspoint - Pcrosspoint).print(); std::cout << '\n';
-	
-	if (OnGround)
-	{
-		mPos.y += (Gcrosspoint - Pcrosspoint).y - gravity;
-		// gravity = 0;
-		// 방향 : (crosspoint - p4); 위로 방향
-		// 크기 : (crosspoint - bottom)
-		return true;
-	}
-	return false; // 충돌 하지 않음.
-}
-/// <summary>
-/// 
-/// </summary>
-/// <param name="v1"></param> ground
-/// <param name="v2"></param> ground
-/// <param name="v3"></param> player
-/// <param name="v4"></param> player
-//void Player::cal(Vector2D v1, Vector2D v2, Vector2D v3, Vector2D v4) 
-//{
-//	float num1, den1;
-//	float num2, den2;
-//	Vector2D c1 = mPos;
-//	Vector2D c2 = other.mPos;
-//
-//	num1 = ((c1.x - v1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - v1.y));
-//	den1 = ((v2.x - v1.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (v2.y - v1.y));
-//	t = num1 / den1;
-//	Gcrosspoint = g1 * (1 - t) + g2 * t;
-//
-//	// Pcrosspoint
-//	num2 = ((c1.x - p4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (c1.y - p4.y));
-//	den2 = ((p3.x - p4.x) * (c2.y - c1.y)) - ((c2.x - c1.x) * (p3.y - p4.y));
-//	p = num2 / den2;
-//	Pcrosspoint = p4 * (1 - p) + p3 * p;
-//}
-
-
-void Player::Move() 
+void Player::Move()
 {
 	// if (OnGround)		// 땅이면
 	// 	mVelo.y = 0.0f;
@@ -156,9 +81,9 @@ void Player::Move()
 	// {
 	// 	mPos.y += gravity;
 	// }
-	
+
 	mPos.y += gravity;
-	
+
 
 	if (KeyDown(VK_LEFT) || KeyDown('A') || KeyDown('a'))
 	{
@@ -189,8 +114,8 @@ void Player::Move()
 
 void Player::IsGround(Sprite& other) {
 	// player 바닥이 다른 sprite의 Top과 맞닿으면 y축 속도는 0이 된다. 
-	if((other.Top - Bottom <= 0.001f)
+	if ((other.Top - Bottom <= 0.001f)
 		&& (Right > other.Left
-		&& (Left < other.Right))) OnGround = true;
+			&& (Left < other.Right))) OnGround = true;
 	else OnGround = false;
 }

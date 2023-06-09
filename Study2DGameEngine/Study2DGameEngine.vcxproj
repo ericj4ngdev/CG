@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
-    <LibraryPath>C:\CG\Study2DGameEngine\Game\lib;C:\CG\Study2DGameEngine\Game\Freeimage;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\CG\Study2DGameEngine\Game\Include;$(ExternalIncludePath);C:\CG\Study2DGameEngine\Game\Freeimage</IncludePath>
+    <LibraryPath>C:\CG\Study2DGameEngine\Game\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ExternalIncludePath);C:\CG\Study2DGameEngine\Game\Include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,7 +113,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>FreeImage.lib;glut32.lib;freeglut.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glut32.lib;freeglut.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,7 +139,6 @@
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\Sprite.cpp" />
     <ClCompile Include="Game\Stage.cpp" />
-    <ClCompile Include="Game\Texture.cpp" />
     <ClCompile Include="Game\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +148,6 @@
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\Sprite.h" />
     <ClInclude Include="Game\Stage.h" />
-    <ClInclude Include="Game\Texture.h" />
     <ClInclude Include="Game\Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
