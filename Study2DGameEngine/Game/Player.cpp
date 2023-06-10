@@ -10,7 +10,7 @@ void Player::init() {
 	gravity = 4;
 	OnGround = false;
 	OnCollide = false;
-	JumpPower = 100;
+	JumpPower = 0;
 	MoveSpeed = 2.0f;
 	isAttack = false;
 	loadTexture();
@@ -28,8 +28,6 @@ void Player::Transform()
 	vRB = Vector2D(Right, Bottom);
 	vLB = Vector2D(Left, Bottom);
 }
-
-
 
 void Player::Render()
 {
@@ -82,7 +80,12 @@ bool Player::Collide(Sprite other)
 
 void Player::Move()
 {
-	mPos.y += gravity;
+	mPos.y += gravity - JumpPower;
+	// std::cout << OnGround << '\n';
+	if (JumpPower > 0)
+		JumpPower -= 0.5f;		// 매 프레임마다 순차적으로 뺴준다. 
+	else
+		JumpPower = 0;
 
 	if (KeyDown(VK_LEFT))
 	{
@@ -94,10 +97,9 @@ void Player::Move()
 		mPos.x += mVelo.x;
 	}
 
-	if (KeyDown(VK_UP))
-	{
-		mPos.y -= mVelo.y;
-	}
+	if (KeyDown(VK_SPACE) && OnGround)
+		JumpPower = 10;
+	
 
 	if (KeyDown('Z') || KeyDown('z'))
 	{
@@ -108,6 +110,7 @@ void Player::Move()
 	{
 		glScalef(mSize.x, mSize.y / 2, 1);
 	}
+	OnGround = false;
 }
 
 void Player::Attack() 
@@ -131,10 +134,9 @@ void Player::Attack()
 	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
 }
 
-void Player::IsGround(Sprite& other) {
-	// player 바닥이 다른 sprite의 Top과 맞닿으면 y축 속도는 0이 된다. 
-	if ((other.Top - Bottom <= 0.001f)
-		&& (Right > other.Left
-			&& (Left < other.Right))) OnGround = true;
-	else OnGround = false;
-}
+//void Player::IsGround(Sprite& other) 
+//{
+//	// player 바닥이 다른 sprite의 Top과 맞닿으면 y축 속도는 0이 된다. 
+//	if (other.Top - Bottom <= 0.1f) OnGround = true;
+//	else OnGround = false;
+//} 

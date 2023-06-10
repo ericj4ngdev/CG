@@ -13,16 +13,13 @@
 #include <iostream>
 #include <string>
 
-
 #include "glut.h"
 #include "Vector2D.h"
 #include "Color4f.h"
 #include "Sprite.h"
 #include "Player.h"
 #include "Ground.h"
-#include "Stage.h"
 #include "Enemy.h"
-
 
 // 외부 참조 구조체 g_Extern 선언
 // 외부 소스파일에서 접근 시, extern 키워드와 함께 사용.
@@ -48,3 +45,5 @@ static int KeyUp(int vk)
 }
 
 #endif
+
+#include "Stage.h"

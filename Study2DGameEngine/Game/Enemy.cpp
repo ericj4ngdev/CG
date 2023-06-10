@@ -1,14 +1,14 @@
 #include "Include.h"
 void Enemy::init() {
-	mPos = Vector2D(300, 0);		// 초기위치
+	mPos = Vector2D(550, 200);		// 초기위치
 	mVelo = Vector2D(2, 2);
-	mSize = Vector2D(50, 100);
+	mSize = Vector2D(50, 50);
 	m_Texid = NULL;
-	mColor = Color4f(1, 1, 1, 1);
+	mColor = Color4f(0.1, 0.1, 0.8, 0.5);
+	MoveSpeed = 2.0f;
 	gravity = 4;
 	OnGround = false;
 	OnCollide = false;
-	MoveSpeed = 2.0f;
 	loadTexture();
 }
 
@@ -23,23 +23,6 @@ void Enemy::Transform()
 	vRT = Vector2D(Right, Top);
 	vRB = Vector2D(Right, Bottom);
 	vLB = Vector2D(Left, Bottom);
-}
-
-bool Enemy::Collide(Sprite other)
-{
-	// 축 검사해서 겹치면 
-	// bottom > other.top (일반 좌표)
-	// 실시간이라 변수로 계산 X
-	if ((Right >= other.Left)
-		&& (Left <= other.Right)
-		&& (Bottom >= other.Top)
-		&& (Top <= other.Bottom))
-	{
-		OnCollide = true;
-		return true;
-	}
-	OnCollide = false;
-	return false; // 충돌 하지 않음.
 }
 
 void Enemy::Render()
@@ -63,12 +46,27 @@ void Enemy::Render()
 	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
 }
 
-void Enemy::Move() 
-{
 
+bool Enemy::Collide(Sprite other)
+{
+	// 축 검사해서 겹치면 
+	// bottom > other.top (일반 좌표)
+	// 실시간이라 변수로 계산 X
+	if ((Right >= other.Left)
+		&& (Left <= other.Right)
+		&& (Bottom >= other.Top)
+		&& (Top <= other.Bottom))
+	{
+		OnCollide = true;
+		return true;
+	}
+	OnCollide = false;
+	return false; // 충돌 하지 않음.
 }
 
-void Enemy::IsGround(Sprite& other)
-{
 
+void Enemy::Move() 
+{
+	mPos.y += gravity;
+	mPos.x -= mVelo.x;
 }

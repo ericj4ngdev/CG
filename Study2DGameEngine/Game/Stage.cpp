@@ -12,29 +12,30 @@ Stage::~Stage()
 void Stage::init() 
 {
 	mPlayer.init();
-	
+	mEnemy.init();
+
 	for (int i = 0; i < 14; i++)
 	{
-		arrground[i].SetmPos(i * 50, 500);
+		arrground[i].SetmPos(i * 50, 450);
 		arrground[i].init();
 	}
 	for (int i = 0; i < 8; i++)
 	{
-		arrPlatform1[i].SetmPos(150 + i * 50, 300);
+		arrPlatform1[i].SetmPos(250 + i * 50, 250);
 		arrPlatform1[i].init();
 	}
-	for (int i = 0; i < 10; i++)
-	{
-		arrPlatform2[i].SetmPos(230 + i * 50, 100);
-		arrPlatform2[i].init();
-	}
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	arrPlatform2[i].SetmPos(230 + i * 50, 100);
+	// 	arrPlatform2[i].init();
+	// }
 
 }
 
 void Stage::Release() 
 {
 	mPlayer.Release();
-
+	mEnemy.Release();
 	for (int i = 0; i < 14; i++)
 	{
 		arrground[i].Release();
@@ -43,15 +44,15 @@ void Stage::Release()
 	{
 		arrPlatform1[i].Release();
 	}
-	for (int i = 0; i < 10; i++)
-	{
-		arrPlatform2[i].Release();
-	}
-
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	arrPlatform2[i].Release();
+	// }
 }
 
 void Stage::Render() {
 	mPlayer.Render();
+	mEnemy.Render();
 	for (int i = 0; i < 14; i++)
 	{
 		arrground[i].Render();
@@ -60,15 +61,16 @@ void Stage::Render() {
 	{
 		arrPlatform1[i].Render();
 	}
-	for (int i = 0; i < 10; i++)
-	{
-		arrPlatform2[i].Render();
-	}
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	arrPlatform2[i].Render();
+	// }
 
 }
 
 void Stage::Transform() {
 	mPlayer.Transform();
+	mEnemy.Transform();
 	for (int i = 0; i < 14; i++)
 	{
 		arrground[i].Transform();
@@ -77,10 +79,10 @@ void Stage::Transform() {
 	{
 		arrPlatform1[i].Transform();
 	}
-	for (int i = 0; i < 10; i++)
-	{
-		arrPlatform2[i].Transform();
-	}
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	arrPlatform2[i].Transform();
+	// }
 }
 
 void Stage::Collide()
@@ -88,39 +90,25 @@ void Stage::Collide()
 	for (int i = 0; i < 14; i++)
 	{
 		arrground[i].CollidebyVector(mPlayer);
+		arrground[i].CollidebyVector(mEnemy);
 	}
 	for (int i = 0; i < 8; i++)
 	{
 		arrPlatform1[i].CollidebyVector(mPlayer);
+		arrPlatform1[i].CollidebyVector(mEnemy);
 	}
 
-	for (int i = 0; i < 10; i++)
-	{
-		arrPlatform2[i].CollidebyVector(mPlayer);
-	}
-
-	// ¶¥ Ã¼Å©
-	// mPlayer.IsGround(mGround1);
-	// mPlayer.IsGround(mGround2);
-	// mPlayer.IsGround(mGround3);
-	// mPlayer.IsGround(mGround4);
-	// mPlayer.IsGround(mGround5);
-	// mPlayer.IsGround(mPlatform1);
-	// mPlayer.IsGround(mPlatform2);
-	// mPlayer.IsGround(mPlatform3);
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	arrPlatform2[i].CollidebyVector(mPlayer);
+	// 	arrPlatform2[i].CollidebyVector(mEnemy);
+	// }
 
 }
 
-
-	// if (mPlayer.Collide(mGround)) 
-	// {
-	// 	mPlayer.mColor = Color4f(1, 0, 1, 1);
-	// }
-	// else mPlayer.mColor = Color4f(1, 1, 1, 1);
-	
-	// mPlayer.CollidebyVector(mGround);
-
 void Stage::FrameMove()
 {
+	printf("%d\n", mPlayer.OnGround);
 	mPlayer.Move();
+	mEnemy.Move();
 }

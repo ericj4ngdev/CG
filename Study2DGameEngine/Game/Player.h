@@ -5,10 +5,10 @@ class Player : public Sprite
 private:
 	float MoveSpeed;
 	float gravity;
-	float JumpPower;
-	bool OnGround;
+	float JumpPower;	
 	bool OnCollide;
 	bool isAttack;
+
 public:
 	void init() override;
 	void Transform() override;
@@ -17,7 +17,7 @@ public:
 	void Move();
 	void Attack();
 
-	void IsGround(Sprite& other);
+	// void IsGround(Sprite& other);
 };
 
 #endif

@@ -3,7 +3,7 @@
 void Ground::init()
 {
 	// mPos = Vector2D(300, 300);
-	mSize = Vector2D(50, 50);
+	mSize = Vector2D(60, 50);
 	m_Texid = NULL;
 	mColor = Color4f(0, 0, 0, 1);
 	OnCollide = false;
@@ -40,6 +40,21 @@ void Ground::Render()
 
 	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
 	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
+}
+
+bool Ground::Collide(Sprite other)
+{
+	// 축 검사해서 겹치면 
+	// bottom > other.top (일반 좌표)
+	// 실시간이라 변수로 계산 X
+	if ((Right >= other.Left)
+		&& (Left <= other.Right)
+		&& (Bottom >= other.Top)
+		&& (Top <= other.Bottom))
+	{
+		return true;
+	}
+	return false; // 충돌 하지 않음.
 }
 
 bool Ground::CollidebyVector(Sprite& other)
@@ -87,25 +102,11 @@ bool Ground::CollidebyVector(Sprite& other)
 			other.mPos.x += PushVector.x;
 		else
 			other.mPos.y += PushVector.y - 4;		// 4는 player의 gravity이다. 
-
+		other.OnGround = true;						// player의 OnGround 변수를 바꾼다. 
 		other.Transform();
 		return true;
 	}
-	return false; // 충돌 하지 않음.
-}
-
-bool Ground::Collide(Sprite other)
-{
-	// 축 검사해서 겹치면 
-	// bottom > other.top (일반 좌표)
-	// 실시간이라 변수로 계산 X
-	if ((Right >= other.Left)
-		&& (Left <= other.Right)
-		&& (Bottom >= other.Top)
-		&& (Top <= other.Bottom))
-	{
-		return true;
-	}
+	// other.OnGround = false;
 	return false; // 충돌 하지 않음.
 }
 
@@ -133,10 +134,4 @@ float Ground::ccw(Vector2D a, Vector2D b) {
 
 float Ground::ccw(Vector2D p, Vector2D a, Vector2D b) {
 	return ccw(a - p, b - p);
-}
-
-
-void Ground::Render(int num)
-{
-
 }

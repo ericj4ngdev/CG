@@ -13,7 +13,6 @@ public:
 	void Render() override;
 	bool Collide(Sprite other) override;
 	void Move();
-	void IsGround(Sprite& other);
 
 };
 

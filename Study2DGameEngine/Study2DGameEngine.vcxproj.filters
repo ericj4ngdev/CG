@@ -13,26 +13,32 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\Color4f">
-      <UniqueIdentifier>{5a9c6acf-6969-4651-a172-0fd9a7ae5c9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Sprite">
-      <UniqueIdentifier>{5d60a590-2030-411d-980b-582f4d1f2a0a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Vector2D">
-      <UniqueIdentifier>{be9f20b3-1a94-4891-a45b-dfea94339f82}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Stage">
       <UniqueIdentifier>{a360439a-4b18-4bb3-ac67-e2295ece5320}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Player">
+    <Filter Include="소스 파일\Stage\Player">
       <UniqueIdentifier>{02aff94a-1099-4094-ab1b-6beeddecbd55}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Ground">
-      <UniqueIdentifier>{cb7aab62-3245-4587-aba1-3f7210ef4324}</UniqueIdentifier>
+    <Filter Include="소스 파일\Engine">
+      <UniqueIdentifier>{f337b1c3-7a8a-43b4-ba4b-4592bfb9590f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Enemy">
+    <Filter Include="소스 파일\Stage\Enemy">
       <UniqueIdentifier>{aba2791e-0029-477d-a6a0-eadf7ddf8c59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine\Sprite">
+      <UniqueIdentifier>{5d60a590-2030-411d-980b-582f4d1f2a0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine\Color4f">
+      <UniqueIdentifier>{5a9c6acf-6969-4651-a172-0fd9a7ae5c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine\Vector2D">
+      <UniqueIdentifier>{be9f20b3-1a94-4891-a45b-dfea94339f82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage\Map">
+      <UniqueIdentifier>{d370151e-9847-4ee5-81b3-2647b291c051}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage\Map\Ground">
+      <UniqueIdentifier>{cb7aab62-3245-4587-aba1-3f7210ef4324}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,51 +46,51 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Game\Color4f.cpp">
-      <Filter>소스 파일\Color4f</Filter>
+      <Filter>소스 파일\Engine\Color4f</Filter>
     </ClCompile>
     <ClCompile Include="Game\Vector2D.cpp">
-      <Filter>소스 파일\Vector2D</Filter>
+      <Filter>소스 파일\Engine\Vector2D</Filter>
     </ClCompile>
     <ClCompile Include="Game\Sprite.cpp">
-      <Filter>소스 파일\Sprite</Filter>
+      <Filter>소스 파일\Engine\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Game\Stage.cpp">
       <Filter>소스 파일\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Game\Player.cpp">
-      <Filter>소스 파일\Player</Filter>
+      <Filter>소스 파일\Stage\Player</Filter>
     </ClCompile>
     <ClCompile Include="Game\Ground.cpp">
-      <Filter>소스 파일\Ground</Filter>
+      <Filter>소스 파일\Stage\Map\Ground</Filter>
     </ClCompile>
     <ClCompile Include="Game\Enemy.cpp">
-      <Filter>소스 파일\Enemy</Filter>
+      <Filter>소스 파일\Stage\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Color4f.h">
-      <Filter>소스 파일\Color4f</Filter>
+      <Filter>소스 파일\Engine\Color4f</Filter>
     </ClInclude>
     <ClInclude Include="Game\Vector2D.h">
-      <Filter>소스 파일\Vector2D</Filter>
+      <Filter>소스 파일\Engine\Vector2D</Filter>
     </ClInclude>
     <ClInclude Include="Game\Sprite.h">
-      <Filter>소스 파일\Sprite</Filter>
+      <Filter>소스 파일\Engine\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="Game\Stage.h">
       <Filter>소스 파일\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Game\Player.h">
-      <Filter>소스 파일\Player</Filter>
+      <Filter>소스 파일\Stage\Player</Filter>
     </ClInclude>
     <ClInclude Include="Game\Ground.h">
-      <Filter>소스 파일\Ground</Filter>
+      <Filter>소스 파일\Stage\Map\Ground</Filter>
     </ClInclude>
     <ClInclude Include="Game\Include.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enemy.h">
-      <Filter>소스 파일\Enemy</Filter>
+      <Filter>소스 파일\Stage\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,15 +5,7 @@ class Stage
 {
 private:
 	Player mPlayer;
-	Ground mGround1;
-	Ground mGround2;
-	Ground mGround3;
-	Ground mGround4;
-	Ground mGround5;
-	Ground mPlatform1;
-	Ground mPlatform2;
-	Ground mPlatform3;
-	Ground mPlatform4;
+	Enemy mEnemy;
 	Ground arrground[14];
 	Ground arrPlatform1[8];
 	Ground arrPlatform2[10];
@@ -27,8 +19,7 @@ public:
 	void Render();
 	void Transform();
 	void FrameMove();		// 움직임 추가
-	void Collide();
-	
+	void Collide();	
 };
 
 #endif
