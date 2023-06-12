@@ -2,52 +2,38 @@
 DWORD startTime = 0; // 시작 시간을 저장하는 변수
 
 void Player::init() {
-	mPos = Vector2D(300, 0);		// 초기위치
-	mVelo = Vector2D(2, 2);
-	mSize = Vector2D(50, 100);
-	m_Texid = NULL;
-	mColor = Color4f(1, 1, 1, 1);
+	mTransform.mPos = Vector2D(300, 0);		// 초기위치
+	mTransform.mSize = Vector2D(50, 100);
+	mSprite.m_Texid = NULL;
+	mSprite.mColor = Color4f(1, 1, 1, 1);
+	
 	gravity = 4;
+	mVelo = Vector2D(2, 2);
 	OnGround = false;
 	OnCollide = false;
 	JumpPower = 0;
 	MoveSpeed = 2.0f;
 	isAttack = false;
-	loadTexture();
+	mSprite.loadTexture();
 }
 
 void Player::Transform()
 {
-	Top = mPos.y - mSize.y / 2;
-	Bottom = mPos.y + mSize.y / 2;
-	Right = mPos.x + mSize.x / 2;
-	Left = mPos.x - mSize.x / 2;
-
-	vLT = Vector2D(Left, Top);
-	vRT = Vector2D(Right, Top);
-	vRB = Vector2D(Right, Bottom);
-	vLB = Vector2D(Left, Bottom);
+	mSprite.SquareArea(mTransform.mPos, mTransform.mSize);
+	// mSprite.Top = mTransform.mPos.y - mTransform.mSize.y / 2;
+	// mSprite.Bottom = mTransform.mPos.y + mTransform.mSize.y / 2;
+	// mSprite.Right = mTransform.mPos.x + mTransform.mSize.x / 2;
+	// mSprite.Left = mTransform.mPos.x - mTransform.mSize.x / 2;
+	// 
+	// mSprite.vLT = Vector2D(mSprite.Left, mSprite.Top);
+	// mSprite.vRT = Vector2D(mSprite.Right, mSprite.Top);
+	// mSprite.vRB = Vector2D(mSprite.Right, mSprite.Bottom);
+	// mSprite.vLB = Vector2D(mSprite.Left, mSprite.Bottom);
 }
 
 void Player::Render()
-{
-	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
-	glBindTexture(GL_TEXTURE_2D, m_Texid);
-	// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
-
-	// 현재의 색상을 설정하는 함수
-	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);
-
-	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
-	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
-
-	glTranslatef(mPos.x, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
-	glScalef(-mSize.x, mSize.y, 1);
-
-	DrawBox(1);
-
-	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
-	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
+{	
+	mSprite.RenderSquare(mTransform.mPos, mTransform.mSize);
 
 	if (isAttack) {
 		DWORD currentTime = GetTickCount64(); // 현재 시간 측정
@@ -56,45 +42,32 @@ void Player::Render()
 		if ((currentTime - startTime) >= 250)
 			isAttack = false;
 
-		Attack();
+		// Attack();
 	}
-
 }
 
-bool Player::Collide(Sprite other)
+bool Player::Collide(Enemy other)
 {
-	// 축 검사해서 겹치면 
-	// bottom > other.top (일반 좌표)
-	// 실시간이라 변수로 계산 X
-	if ((Right >= other.Left)
-		&& (Left <= other.Right)
-		&& (Bottom >= other.Top)
-		&& (Top <= other.Bottom))
-	{
-		OnCollide = true;
-		return true;
-	}
-	OnCollide = false;
-	return false; // 충돌 하지 않음.
+	mCollider.Collide(other.mSprite);
 }
 
 void Player::Move()
 {
-	mPos.y += gravity - JumpPower;
+	// mTransform.mPos.y += gravity - JumpPower;
 	// std::cout << OnGround << '\n';
-	if (JumpPower > 0)
-		JumpPower -= 0.5f;		// 매 프레임마다 순차적으로 뺴준다. 
-	else
-		JumpPower = 0;
+	// if (JumpPower > 0)
+	// 	JumpPower -= 0.5f;		// 매 프레임마다 순차적으로 뺴준다. 
+	// else
+	// 	JumpPower = 0;
 
 	if (KeyDown(VK_LEFT))
 	{
-		mPos.x -= mVelo.x;
+		mTransform.mPos.x -= mVelo.x;
 	}
 
 	if (KeyDown(VK_RIGHT))
 	{
-		mPos.x += mVelo.x;
+		mTransform.mPos.x += mVelo.x;
 	}
 
 	if (KeyDown(VK_SPACE) && OnGround)
@@ -105,34 +78,29 @@ void Player::Move()
 	{
 		isAttack = true;
 	}
-
-	if (KeyDown(VK_DOWN))
-	{
-		glScalef(mSize.x, mSize.y / 2, 1);
-	}
 	OnGround = false;
 }
 
-void Player::Attack() 
-{
-	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
-	glBindTexture(GL_TEXTURE_2D, m_Texid);
-	// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
-
-	// 현재의 색상을 설정하는 함수
-	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);
-
-	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
-	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
-
-	glTranslatef(mPos.x + 150, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
-	glScalef(-mSize.x * 4, mSize.y / 4, 1);
-
-	DrawBox(1);
-
-	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
-	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
-}
+//void Player::Attack() 
+//{
+//	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
+//	glBindTexture(GL_TEXTURE_2D, m_Texid);
+//	// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
+//
+//	// 현재의 색상을 설정하는 함수
+//	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);
+//
+//	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
+//	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
+//
+//	glTranslatef(mPos.x + 150, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
+//	glScalef(-mSize.x * 4, mSize.y / 4, 1);
+//
+//	DrawBox(1);
+//
+//	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
+//	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
+//}
 
 //void Player::IsGround(Sprite& other) 
 //{

@@ -133,23 +133,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\cObject.cpp" />
+    <ClCompile Include="Game\Collider.cpp" />
     <ClCompile Include="Game\Color4f.cpp" />
+    <ClCompile Include="Game\cWeapon.cpp" />
     <ClCompile Include="Game\Enemy.cpp" />
     <ClCompile Include="Game\Ground.cpp" />
     <ClCompile Include="Game\main.cpp" />
     <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="Game\Sprite.cpp" />
     <ClCompile Include="Game\Stage.cpp" />
+    <ClCompile Include="Game\Transform.cpp" />
     <ClCompile Include="Game\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\cObject.h" />
+    <ClInclude Include="Game\Collider.h" />
     <ClInclude Include="Game\Color4f.h" />
+    <ClInclude Include="Game\Component.h" />
+    <ClInclude Include="Game\cWeapon.h" />
     <ClInclude Include="Game\Enemy.h" />
     <ClInclude Include="Game\Ground.h" />
     <ClInclude Include="Game\Include.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\Sprite.h" />
     <ClInclude Include="Game\Stage.h" />
+    <ClInclude Include="Game\Transform.h" />
     <ClInclude Include="Game\Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

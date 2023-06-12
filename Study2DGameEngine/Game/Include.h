@@ -2,10 +2,8 @@
 #ifndef O_H_
 #define O_H_
 
-// #include "Include/glut.h"
 #pragma comment(lib,"glut32.lib") 
 
-// #include <stdlib.h>
 #include <cmath>
 #include <stdio.h>
 #include <windows.h>
@@ -16,7 +14,14 @@
 #include "glut.h"
 #include "Vector2D.h"
 #include "Color4f.h"
+
+#include "Component.h"
 #include "Sprite.h"
+#include "Collider.h"
+#include "Transform.h"
+
+#include "cWeapon.h"
+#include "cObject.h"
 #include "Player.h"
 #include "Ground.h"
 #include "Enemy.h"

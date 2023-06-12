@@ -2,6 +2,7 @@
 
 Stage::Stage() 
 {
+
 }
 
 Stage::~Stage() 
@@ -13,6 +14,7 @@ void Stage::init()
 {
 	mPlayer.init();
 	mEnemy.init();
+	mobject.mSprite.init();
 
 	for (int i = 0; i < 14; i++)
 	{
@@ -34,8 +36,11 @@ void Stage::init()
 
 void Stage::Release() 
 {
-	mPlayer.Release();
+	// mPlayer.Release();
 	mEnemy.Release();
+
+	mobject.mSprite.Release();
+
 	for (int i = 0; i < 14; i++)
 	{
 		arrground[i].Release();
@@ -53,6 +58,9 @@ void Stage::Release()
 void Stage::Render() {
 	mPlayer.Render();
 	mEnemy.Render();
+	
+	mobject.mSprite.Render();
+
 	for (int i = 0; i < 14; i++)
 	{
 		arrground[i].Render();
@@ -89,12 +97,12 @@ void Stage::Collide()
 {
 	for (int i = 0; i < 14; i++)
 	{
-		arrground[i].CollidebyVector(mPlayer);
+		// arrground[i].CollidebyVector(mPlayer);
 		arrground[i].CollidebyVector(mEnemy);
 	}
 	for (int i = 0; i < 8; i++)
 	{
-		arrPlatform1[i].CollidebyVector(mPlayer);
+		// arrPlatform1[i].CollidebyVector(mPlayer);
 		arrPlatform1[i].CollidebyVector(mEnemy);
 	}
 
@@ -108,7 +116,7 @@ void Stage::Collide()
 
 void Stage::FrameMove()
 {
-	printf("%d\n", mPlayer.OnGround);
+	// printf("%d\n", mPlayer.OnGround);
 	mPlayer.Move();
 	mEnemy.Move();
 }

@@ -1,23 +1,25 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
-class Player : public Sprite
+class Player : public cObject
 {
 private:
+	Vector2D mVelo;
 	float MoveSpeed;
 	float gravity;
-	float JumpPower;	
+	float JumpPower;
+	bool OnGround;
 	bool OnCollide;
 	bool isAttack;
-
 public:
-	void init() override;
-	void Transform() override;
-	void Render() override;
-	bool Collide(Sprite other) override;
+	// 초기화는 생성자
+	// Player() {};
+	// 값 대입은 init에서 
+	void init();		// 컴포넌트들 초기화?
+	void Transform();
+	void Render();
+	bool Collide(Enemy other);
 	void Move();
-	void Attack();
-
-	// void IsGround(Sprite& other);
+	// void Attack();
 };
 
 #endif

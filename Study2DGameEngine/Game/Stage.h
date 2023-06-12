@@ -9,6 +9,8 @@ private:
 	Ground arrground[14];
 	Ground arrPlatform1[8];
 	Ground arrPlatform2[10];
+	cObject mobject;
+
 
 public:
 	Stage();

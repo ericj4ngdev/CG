@@ -1,17 +1,18 @@
 #ifndef ENEMY_H_
 #define ENEMY_H_
-class Enemy : public Sprite
+class Enemy : public cObject
 {
+	
 private:
-	float MoveSpeed;
+	Vector2D mVelo;
 	float gravity;
 	bool OnGround;
 	bool OnCollide;
 public:
-	void init() override;
-	void Transform() override;
-	void Render() override;
-	bool Collide(Sprite other) override;
+	void init();
+	void Transform();
+	void Render();
+	bool Collide(Player other);
 	void Move();
 
 };
