@@ -2,14 +2,24 @@
 
 void Ground::init()
 {
+	mTransform.mPos = Vector2D(0, 0);		// 초기위치
+	mTransform.mSize = Vector2D(50, 100);
+	mSprite.m_Texid = NULL;
+	mSprite.mColor = Color4f(1, 1, 1, 1);
+
+	OnCollide = false;
+	mSprite.loadTexture();
 }
 
 void Ground::Transform()
 {
+	mSprite.SquareArea(mTransform.mPos, mTransform.mSize);
+	
 }
 
 void Ground::Render()
 {
+	mSprite.RenderSquare(mTransform.mPos, mTransform.mSize);
 	// glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
 	// glBindTexture(GL_TEXTURE_2D, m_Texid);		// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
 	// 
@@ -25,4 +35,20 @@ void Ground::Render()
 	// 
 	// glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
 	// glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
+}
+
+bool Ground::Collide(cObject other)
+{
+	mCollider.CollideArea(mTransform.mPos, mTransform.mSize);
+	return mCollider.Collide(other);
+}
+
+void Ground::Release() 
+{
+	mSprite.Release();
+}
+
+void Ground::SetmPos(float x, float y) 
+{
+	mTransform.mPos = Vector2D(x, y);
 }

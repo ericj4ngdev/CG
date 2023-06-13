@@ -23,12 +23,16 @@ void Enemy::Render()
 	mSprite.RenderSquare(mTransform.mPos, mTransform.mSize);
 }
 
-
-bool Enemy::Collide(Player other)
+bool Enemy::Collide(cObject other)
 {
-	return mCollider.Collide(other.mSprite);
+	this->mCollider.CollideArea(mTransform.mPos, mTransform.mSize);
+	return mCollider.Collide(other);
 }
 
+void Enemy::Release()
+{
+	mSprite.Release();
+}
 
 void Enemy::Move() 
 {

@@ -2,10 +2,10 @@
 DWORD startTime = 0; // 시작 시간을 저장하는 변수
 
 void Player::init() {
-	mTransform.mPos = Vector2D(300, 0);		// 초기위치
-	mTransform.mSize = Vector2D(50, 100);
-	mSprite.m_Texid = NULL;
-	mSprite.mColor = Color4f(1, 1, 1, 1);
+	this->mTransform.mPos = Vector2D(500, 0);		// 초기위치
+	this->mTransform.mSize = Vector2D(50, 100);
+	this->mSprite.m_Texid = NULL;
+	this->mSprite.mColor = Color4f(0, 0, 1, 1);
 	
 	gravity = 4;
 	mVelo = Vector2D(2, 2);
@@ -19,21 +19,12 @@ void Player::init() {
 
 void Player::Transform()
 {
-	mSprite.SquareArea(mTransform.mPos, mTransform.mSize);
-	// mSprite.Top = mTransform.mPos.y - mTransform.mSize.y / 2;
-	// mSprite.Bottom = mTransform.mPos.y + mTransform.mSize.y / 2;
-	// mSprite.Right = mTransform.mPos.x + mTransform.mSize.x / 2;
-	// mSprite.Left = mTransform.mPos.x - mTransform.mSize.x / 2;
-	// 
-	// mSprite.vLT = Vector2D(mSprite.Left, mSprite.Top);
-	// mSprite.vRT = Vector2D(mSprite.Right, mSprite.Top);
-	// mSprite.vRB = Vector2D(mSprite.Right, mSprite.Bottom);
-	// mSprite.vLB = Vector2D(mSprite.Left, mSprite.Bottom);
+	this->mSprite.SquareArea(mTransform.mPos, mTransform.mSize);
 }
 
 void Player::Render()
 {	
-	mSprite.RenderSquare(mTransform.mPos, mTransform.mSize);
+	this->mSprite.RenderSquare(mTransform.mPos, mTransform.mSize);
 
 	if (isAttack) {
 		DWORD currentTime = GetTickCount64(); // 현재 시간 측정
@@ -46,14 +37,21 @@ void Player::Render()
 	}
 }
 
-bool Player::Collide(Enemy other)
+bool Player::Collide(cObject other)
 {
-	mCollider.Collide(other.mSprite);
+	this->mCollider.CollideArea(mTransform.mPos, mTransform.mSize);
+	return mCollider.Collide(other);
 }
+
+void Player::Release()
+{
+	this->mSprite.Release();
+}
+
 
 void Player::Move()
 {
-	// mTransform.mPos.y += gravity - JumpPower;
+	this->mTransform.mPos.y += gravity - JumpPower;
 	// std::cout << OnGround << '\n';
 	// if (JumpPower > 0)
 	// 	JumpPower -= 0.5f;		// 매 프레임마다 순차적으로 뺴준다. 
@@ -62,12 +60,12 @@ void Player::Move()
 
 	if (KeyDown(VK_LEFT))
 	{
-		mTransform.mPos.x -= mVelo.x;
+		this->mTransform.mPos.x -= mVelo.x;
 	}
 
 	if (KeyDown(VK_RIGHT))
 	{
-		mTransform.mPos.x += mVelo.x;
+		this->mTransform.mPos.x += mVelo.x;
 	}
 
 	if (KeyDown(VK_SPACE) && OnGround)

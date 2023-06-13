@@ -2,7 +2,7 @@
 #define PLAYER_H_
 class Player : public cObject
 {
-private:
+public:
 	Vector2D mVelo;
 	float MoveSpeed;
 	float gravity;
@@ -17,7 +17,8 @@ public:
 	void init();		// 컴포넌트들 초기화?
 	void Transform();
 	void Render();
-	bool Collide(Enemy other);
+	bool Collide(cObject other);
+	void Release();
 	void Move();
 	// void Attack();
 };

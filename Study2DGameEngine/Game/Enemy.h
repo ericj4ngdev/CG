@@ -12,8 +12,9 @@ public:
 	void init();
 	void Transform();
 	void Render();
-	bool Collide(Player other);
+	bool Collide(cObject other);
 	void Move();
+	void Release();
 
 };
 

@@ -53,9 +53,9 @@ void FrameMove() {
 // 매 프레임마다 호출되는 함수로 update같다고 보면 된다. 
 void display() 
 {
+    FrameMove();
     Transform();
     Collide();
-    FrameMove();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

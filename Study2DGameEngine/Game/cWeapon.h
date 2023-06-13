@@ -7,8 +7,6 @@ public:
 	Collider mCollider;
 private:
 	float length;
-
-
 };
 
 #endif

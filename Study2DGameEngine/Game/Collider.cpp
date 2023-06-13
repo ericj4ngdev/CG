@@ -1,21 +1,30 @@
 #include "Include.h"
 
-bool Collider::Collide(Sprite other)
+void Collider::CollideArea(Vector2D pos, Vector2D size) {
+	Top = pos.y - size.y / 2;
+	Bottom = pos.y + size.y / 2;
+	Right = pos.x + size.x / 2;
+	Left = pos.x - size.x / 2;
+
+	vLT = Vector2D(Left, Top);
+	vRT = Vector2D(Right, Top);
+	vRB = Vector2D(Right, Bottom);
+	vLB = Vector2D(Left, Bottom);
+}
+
+bool Collider::Collide(cObject other)
 {
-	// 축 검사해서 겹치면 
-	// bottom > other.top (일반 좌표)
-	// 실시간이라 변수로 계산 X
-	if ((Right >= other.Left)
-		&& (Left <= other.Right)
-		&& (Bottom >= other.Top)
-		&& (Top <= other.Bottom))
+	if ((Right >= other.mCollider.Left)
+		&& (Left <= other.mCollider.Right)
+		&& (Bottom >= other.mCollider.Top)
+		&& (Top <= other.mCollider.Bottom))
 	{
 		return true;
 	}
 	return false; // 충돌 하지 않음.
 }
 
-bool Collider::CollidebyVector(Player& other)
+bool Collider::CollidebyVector(cObject& other)
 {
 	Vector2D o1 = other.mSprite.vLT;
 	Vector2D o2 = other.mSprite.vRT;
@@ -55,11 +64,12 @@ bool Collider::CollidebyVector(Player& other)
 	if (OnCollide)
 	{
 		if (fabs(PushVector.x) > fabs(PushVector.y))
-			other.mPos.x += PushVector.x;
+			other.mTransform.mPos.x += PushVector.x;
 		else
-			other.mPos.y += PushVector.y - 4;		// 4는 player의 gravity이다. 
-		other.OnGround = true;						// player의 OnGround 변수를 바꾼다. 
-		other.Transform();
+			other.mTransform.mPos.y += PushVector.y - 4;		// 4는 player의 gravity이다. 
+		// other.OnGround = true;						// player의 OnGround 변수를 바꾼다. 
+		// other.Transform();
+		other.mCollider.CollideArea(other.mTransform.mPos, other.mTransform.mSize);
 		return true;
 	}
 	// other.OnGround = false;

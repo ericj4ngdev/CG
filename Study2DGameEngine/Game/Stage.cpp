@@ -14,7 +14,7 @@ void Stage::init()
 {
 	mPlayer.init();
 	mEnemy.init();
-	mobject.mSprite.init();
+	// mobject.mSprite.init();
 
 	for (int i = 0; i < 14; i++)
 	{
@@ -36,10 +36,8 @@ void Stage::init()
 
 void Stage::Release() 
 {
-	// mPlayer.Release();
+	mPlayer.Release();
 	mEnemy.Release();
-
-	mobject.mSprite.Release();
 
 	for (int i = 0; i < 14; i++)
 	{
@@ -55,11 +53,10 @@ void Stage::Release()
 	// }
 }
 
-void Stage::Render() {
+void Stage::Render() 
+{
 	mPlayer.Render();
 	mEnemy.Render();
-	
-	mobject.mSprite.Render();
 
 	for (int i = 0; i < 14; i++)
 	{
@@ -76,9 +73,12 @@ void Stage::Render() {
 
 }
 
-void Stage::Transform() {
+void Stage::Transform() 
+{
+
 	mPlayer.Transform();
 	mEnemy.Transform();
+
 	for (int i = 0; i < 14; i++)
 	{
 		arrground[i].Transform();
@@ -97,13 +97,13 @@ void Stage::Collide()
 {
 	for (int i = 0; i < 14; i++)
 	{
-		// arrground[i].CollidebyVector(mPlayer);
-		arrground[i].CollidebyVector(mEnemy);
+		arrground[i].mCollider.CollidebyVector(mPlayer);
+		arrground[i].mCollider.CollidebyVector(mEnemy);
 	}
 	for (int i = 0; i < 8; i++)
 	{
-		// arrPlatform1[i].CollidebyVector(mPlayer);
-		arrPlatform1[i].CollidebyVector(mEnemy);
+		arrPlatform1[i].mCollider.CollidebyVector(mPlayer);
+		arrPlatform1[i].mCollider.CollidebyVector(mEnemy);
 	}
 
 	// for (int i = 0; i < 10; i++)

@@ -4,6 +4,7 @@
 
 #pragma comment(lib,"glut32.lib") 
 
+#include <stdlib.h>
 #include <cmath>
 #include <stdio.h>
 #include <windows.h>
@@ -15,13 +16,12 @@
 #include "Vector2D.h"
 #include "Color4f.h"
 
-#include "Component.h"
-#include "Sprite.h"
-#include "Collider.h"
 #include "Transform.h"
+#include "Collider.h"
+#include "Sprite.h"
+#include "cObject.h"
 
 #include "cWeapon.h"
-#include "cObject.h"
 #include "Player.h"
 #include "Ground.h"
 #include "Enemy.h"
