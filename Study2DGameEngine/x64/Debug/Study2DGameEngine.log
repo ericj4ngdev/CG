@@ -1,9 +1,1 @@
-﻿  Enemy.cpp
-  Ground.cpp
-  Player.cpp
-  Sprite.cpp
-  Stage.cpp
-  Vector2D.cpp
-  main.cpp
-  코드를 생성하고 있습니다...
-  Study2DGameEngine.vcxproj -> C:\CG\Study2DGameEngine\x64\Debug\Study2DGameEngine.exe
+﻿LINK : fatal error LNK1104: 'FreeImage.lib,glut32.lib' 파일을 열 수 없습니다.

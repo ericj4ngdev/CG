@@ -11,6 +11,7 @@ private:
 
 public:
 	void init() override;
+	void init(char* name);
 	void Transform() override;
 	void Render() override;
 	bool Collide(Sprite other) override;

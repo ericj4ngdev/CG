@@ -17,6 +17,8 @@
 #include "Vector2D.h"
 #include "Color4f.h"
 #include "Sprite.h"
+#include "Texture.h"
+
 #include "Player.h"
 #include "Ground.h"
 #include "Enemy.h"

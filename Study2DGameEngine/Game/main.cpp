@@ -87,8 +87,8 @@ void onIdle()
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
-    g_Extern.WINDOWSIZE_WIDTH = 800;
-    g_Extern.WINDOWSIZE_HEIGHT = 500;
+    g_Extern.WINDOWSIZE_WIDTH = 1600;
+    g_Extern.WINDOWSIZE_HEIGHT = 950;
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(g_Extern.WINDOWSIZE_WIDTH, g_Extern.WINDOWSIZE_HEIGHT);

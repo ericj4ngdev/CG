@@ -6,13 +6,16 @@ class Stage
 private:
 	Player mPlayer;
 	Enemy mEnemy;
-	Ground arrground[14];
-	Ground arrPlatform1[8];
+	Ground arrground[96];
+	Ground arrPlatform1[3];
 	Ground arrPlatform2[10];
+	Ground arrPlatform3[6];
+	Ground arrPlatform4[9];
 
 public:
 	Stage();
 	virtual ~Stage();
+	// int groundSpeed;
 
 	void init();
 	void Release();

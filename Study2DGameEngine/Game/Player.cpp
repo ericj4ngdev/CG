@@ -2,7 +2,7 @@
 DWORD startTime = 0; // 시작 시간을 저장하는 변수
 
 void Player::init() {
-	mPos = Vector2D(300, 0);		// 초기위치
+	mPos = Vector2D(150, 850);		// 초기위치
 	mVelo = Vector2D(2, 2);
 	mSize = Vector2D(50, 100);
 	m_Texid = NULL;
@@ -14,6 +14,20 @@ void Player::init() {
 	MoveSpeed = 2.0f;
 	isAttack = false;
 	loadTexture();
+}
+
+void Player::init(char* name) {
+	mPos = Vector2D(150, 850);		// 초기위치
+	mVelo = Vector2D(2, 2);
+	mSize = Vector2D(50, 100);
+	
+	mColor = Color4f(1, 1, 1, 1);
+	gravity = 4;
+	OnGround = false;
+	OnCollide = false;
+	JumpPower = 0;
+	MoveSpeed = 2.0f;
+	isAttack = false;
 }
 
 void Player::Transform()

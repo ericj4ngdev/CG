@@ -40,6 +40,9 @@
     <Filter Include="소스 파일\Stage\Map\Ground">
       <UniqueIdentifier>{cb7aab62-3245-4587-aba1-3f7210ef4324}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Engine\Texture">
+      <UniqueIdentifier>{28be3769-5e33-4a45-880f-a3703ba8e8d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\main.cpp">
@@ -66,6 +69,9 @@
     <ClCompile Include="Game\Enemy.cpp">
       <Filter>소스 파일\Stage\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Texture.cpp">
+      <Filter>소스 파일\Engine\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Color4f.h">
@@ -91,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="Game\Enemy.h">
       <Filter>소스 파일\Stage\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Texture.h">
+      <Filter>소스 파일\Engine\Texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
