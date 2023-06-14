@@ -1,78 +1,86 @@
 #include <GL/glut.h>
 #include <iostream>
 #include <vector>
-#include <chrono>
-#include <thread>
+#define STB_IMAGE_IMPLEMENTATION
+#include "include/stb_image.h"
+using namespace std;
 
-// 이미지 파일 이름들
-std::vector<std::string> imageFiles = { "1.png", "2.png", "3.png" };
+// image width and height
+int width, height;
 
-// 현재 표시 중인 이미지 인덱스
-int currentImageIndex = 0;
-
-// 이미지 변경 간격 (0.2초)
-const int imageChangeInterval = 200;
-
-// 이미지 변경 시간 체크용 변수
-std::chrono::steady_clock::time_point lastImageChangeTime = std::chrono::steady_clock::now();
-
-void drawImage()
+//이미지 파일 열기
+unsigned char* LoadMeshFromFile(const char* texFile)
 {
-    // 이미지 그리는 로직
-    // 이 부분을 실제로 이미지를 그리는 코드로 대체해야 합니다.
-    // 예시로 현재 표시 중인 이미지의 인덱스를 출력합니다.
-    std::cout << "Current Image Index: " << currentImageIndex << std::endl;
+    GLuint texture;
+    glGenTextures(1, &texture);
+    FILE* fp = NULL;
+    if (fopen_s(&fp, texFile, "rb")) {
+        printf("ERROR : No %s. \n fail to bind %d\n", texFile, texture);
+        return (unsigned char*)false;
+    }
+    int channel;
+    unsigned char* image = stbi_load_from_file(fp, &width, &height, &channel, 4);
+    fclose(fp);
+    return image;
 }
 
-void changeImage()
+// texture 설정
+void init()
 {
-    // 이미지 변경 로직
-    currentImageIndex = (currentImageIndex + 1) % imageFiles.size();
+    GLuint texID;
+
+    unsigned char* bitmap;
+    bitmap = LoadMeshFromFile((char*)"Image/block.png");
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
+
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    free(bitmap);
+}
+
+void drawBox()
+{
+    glBegin(GL_POLYGON);
+    glTexCoord2d(0.0, 1.0);      glVertex3d(-0.5, -0.5, 0.0);
+    glTexCoord2d(0.0, 0.0);      glVertex3d(-0.5, 0.5, 0.0);
+    glTexCoord2d(1.0, 0.0);      glVertex3d(0.5, 0.5, 0.0);
+    glTexCoord2d(1.0, 1.0);      glVertex3d(0.5, -0.5, 0.0);
+    glEnd();
 }
 
 void display()
 {
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    drawImage();
+    drawBox();
 
     glutSwapBuffers();
 }
 
-void keyboard(unsigned char key, int x, int y)
-{
-    if (key == ' ')
-    {
-        // Spacebar를 눌렀을 때 이미지 변경
-        std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
-        std::chrono::duration<double, std::milli> elapsedTime = currentTime - lastImageChangeTime;
-
-        if (elapsedTime.count() >= imageChangeInterval)
-        {
-            changeImage();
-            lastImageChangeTime = currentTime;
-        }
-    }
-}
-
-void idle()
-{
-    glutPostRedisplay();
+void reshape(GLint w, GLint h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 30.0);
 }
 
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("Image Animation");
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(500, 500);
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow("image");
+    glutReshapeFunc(reshape);
+    init();
 
     glutDisplayFunc(display);
-    glutKeyboardFunc(keyboard);
-    glutIdleFunc(idle);
-
     glutMainLoop();
-
     return 0;
 }

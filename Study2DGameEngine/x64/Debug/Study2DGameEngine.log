@@ -1,1 +1,2 @@
-﻿LINK : fatal error LNK1104: 'FreeImage.lib,glut32.lib' 파일을 열 수 없습니다.
+﻿  Stage.cpp
+  Study2DGameEngine.vcxproj -> C:\CG\Study2DGameEngine\x64\Debug\Study2DGameEngine.exe

@@ -2,13 +2,15 @@
 #define ENEMY_H_
 class Enemy : public Sprite
 {
-private:
+public:
+	Vector2D	mVelo;
 	float MoveSpeed;
 	float gravity;
 	bool OnGround;
 	bool OnCollide;
 public:
-	void init() override;
+	void initPos() override;
+	void initTexture(const char *name) override;
 	void Transform() override;
 	void Render() override;
 	bool Collide(Sprite other) override;

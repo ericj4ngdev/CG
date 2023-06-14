@@ -1,11 +1,11 @@
 // 필요한 헤더 파일, 전역 변수 저장소
 #ifndef O_H_
 #define O_H_
-
 // #include "Include/glut.h"
+
 #pragma comment(lib,"glut32.lib") 
 
-// #include <stdlib.h>
+#include <stdlib.h>
 #include <cmath>
 #include <stdio.h>
 #include <windows.h>
@@ -14,11 +14,13 @@
 #include <string>
 
 #include "glut.h"
+#include "stb_image.h"
+
 #include "Vector2D.h"
 #include "Color4f.h"
-#include "Sprite.h"
 #include "Texture.h"
 
+#include "Sprite.h"
 #include "Player.h"
 #include "Ground.h"
 #include "Enemy.h"

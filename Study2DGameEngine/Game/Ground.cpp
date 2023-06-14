@@ -1,6 +1,6 @@
 #include "Include.h"
 
-void Ground::init()
+void Ground::initPos()
 {
 	// mPos = Vector2D(300, 300);
 	mSize = Vector2D(60, 50);
@@ -8,6 +8,19 @@ void Ground::init()
 	mColor = Color4f(0, 0, 0, 1);
 	OnCollide = false;
 	loadTexture();
+}
+
+void Ground::initTexture(const char *name) {
+	// mPos = Vector2D(150, 850);		// 초기위치
+	mSize = Vector2D(60, 50);
+
+	m_Tex.LoadImage(name);
+	m_Texid = NULL;
+	m_Texid = *m_Tex.GetTexture();
+
+	mColor = Color4f(1, 1, 1, 1);
+	OnGround = false;
+	OnCollide = false;
 }
 
 void Ground::Transform()

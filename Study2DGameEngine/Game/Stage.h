@@ -5,7 +5,8 @@ class Stage
 {
 private:
 	Player mPlayer;
-	Enemy mEnemy;
+	Enemy mZombie;
+	Enemy mLeopard;
 	Ground arrground[96];
 	Ground arrPlatform1[3];
 	Ground arrPlatform2[10];
@@ -15,7 +16,7 @@ private:
 public:
 	Stage();
 	virtual ~Stage();
-	// int groundSpeed;
+	int groundSpeed;
 
 	void init();
 	void Release();

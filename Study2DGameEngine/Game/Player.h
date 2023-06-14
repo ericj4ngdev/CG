@@ -2,7 +2,8 @@
 #define PLAYER_H_
 class Player : public Sprite
 {
-private:
+public:
+	Vector2D	mVelo;
 	float MoveSpeed;
 	float gravity;
 	float JumpPower;	
@@ -10,8 +11,8 @@ private:
 	bool isAttack;
 
 public:
-	void init() override;
-	void init(char* name);
+	void initPos() override;
+	void initTexture(const char *name) override;
 	void Transform() override;
 	void Render() override;
 	bool Collide(Sprite other) override;

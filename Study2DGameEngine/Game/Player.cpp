@@ -1,13 +1,13 @@
 #include "Include.h"
 DWORD startTime = 0; // 시작 시간을 저장하는 변수
 
-void Player::init() {
-	mPos = Vector2D(150, 850);		// 초기위치
-	mVelo = Vector2D(2, 2);
+void Player::initPos() {
+	mPos = Vector2D(150, 850/2);		// 초기위치
+	mVelo = Vector2D(3, 3);
 	mSize = Vector2D(50, 100);
 	m_Texid = NULL;
 	mColor = Color4f(1, 1, 1, 1);
-	gravity = 4;
+	gravity = 5;
 	OnGround = false;
 	OnCollide = false;
 	JumpPower = 0;
@@ -16,13 +16,18 @@ void Player::init() {
 	loadTexture();
 }
 
-void Player::init(char* name) {
-	mPos = Vector2D(150, 850);		// 초기위치
+void Player::initTexture(const char *name) {
+	mPos = Vector2D(150, 850/2);		// 초기위치
 	mVelo = Vector2D(2, 2);
 	mSize = Vector2D(50, 100);
 	
+	m_Tex.LoadImage(name);
+	m_Texid = NULL;
+	m_Texid = *m_Tex.GetTexture();
+	// mSize = m_Tex.GetSize();
+
 	mColor = Color4f(1, 1, 1, 1);
-	gravity = 4;
+	gravity = 5;
 	OnGround = false;
 	OnCollide = false;
 	JumpPower = 0;
@@ -112,7 +117,7 @@ void Player::Move()
 	}
 
 	if (KeyDown(VK_SPACE) && OnGround)
-		JumpPower = 10;
+		JumpPower = 15;
 	
 
 	if (KeyDown('Z') || KeyDown('z'))

@@ -1,9 +1,11 @@
 #include "Include.h"
-void Enemy::init() {
-	mPos = Vector2D(550, 200);		// 초기위치
+void Enemy::initPos() {
+	// mPos = Vector2D(550, 850 / 2);		// 초기위치
 	mVelo = Vector2D(2, 2);
 	mSize = Vector2D(50, 50);
+	
 	m_Texid = NULL;
+	
 	mColor = Color4f(0.1, 0.1, 0.8, 0.5);
 	MoveSpeed = 2.0f;
 	gravity = 4;
@@ -12,6 +14,22 @@ void Enemy::init() {
 	loadTexture();
 }
 
+void Enemy::initTexture(const char *name)
+{
+	// mPos = Vector2D(550, 850 / 2);		// 초기위치
+	mVelo = Vector2D(2, 2);
+	mSize = Vector2D(50, 100);
+
+	m_Tex.LoadImage(name);
+	m_Texid = NULL;
+	m_Texid = *m_Tex.GetTexture();
+
+	mColor = Color4f(1, 1, 1, 1);
+	MoveSpeed = 2.0f;
+	gravity = 4;
+	OnGround = false;
+	OnCollide = false;
+}
 void Enemy::Transform()
 {
 	Top = mPos.y - mSize.y / 2;
@@ -63,7 +81,6 @@ bool Enemy::Collide(Sprite other)
 	OnCollide = false;
 	return false; // 충돌 하지 않음.
 }
-
 
 void Enemy::Move() 
 {
