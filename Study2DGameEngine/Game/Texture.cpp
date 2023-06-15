@@ -57,7 +57,6 @@ void Texture::LoadImage(const char* texFile)
         free(image);
     }
     else printf("Texture Load Fail");
-
 }
 
 void Texture::Release()

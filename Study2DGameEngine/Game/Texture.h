@@ -3,7 +3,6 @@
 
 class Texture
 {
-
 public:
 	unsigned char* image;
 	GLuint m_gridTexture;

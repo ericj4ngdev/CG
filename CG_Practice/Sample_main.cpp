@@ -30,12 +30,28 @@ void init()
     GLuint texID;
 
     unsigned char* bitmap;
-    bitmap = LoadMeshFromFile((char*)"Image/block.png");
+    bitmap = LoadMeshFromFile((char*)"Image/player.png");
+
+    // 투명화 작업
+    for (int i = 0; i < width * height; i++)
+    {
+        int r = bitmap[i * 4];
+        int g = bitmap[i * 4 + 1];
+        int b = bitmap[i * 4 + 2];
+    
+        if (r <= 118 && g <= 118 && b <= 118) // 회색인 경우
+        {
+            bitmap[i * 4 + 3] = 0; // 알파값을 0으로 설정하여 투명하게 만듦
+        }
+    }
+
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glGenTextures(1, &texID);
     glBindTexture(GL_TEXTURE_2D, texID);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
 
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -43,13 +59,14 @@ void init()
     free(bitmap);
 }
 
+
 void drawBox()
 {
     glBegin(GL_POLYGON);
-    glTexCoord2d(0.0, 1.0);      glVertex3d(-0.5, -0.5, 0.0);
-    glTexCoord2d(0.0, 0.0);      glVertex3d(-0.5, 0.5, 0.0);
-    glTexCoord2d(1.0, 0.0);      glVertex3d(0.5, 0.5, 0.0);
-    glTexCoord2d(1.0, 1.0);      glVertex3d(0.5, -0.5, 0.0);
+    glTexCoord2d(1.0 / 800.0, 53.0 / 530.0);              glVertex3d(-0.5, -1.0, 0.0);      // 왼쪽 아래    
+    glTexCoord2d(1.0 / 800.0, 21.0 / 530.0);      glVertex3d(-0.5, 1.0, 0.0);       // 왼쪽 위
+    glTexCoord2d(17.0 / 800.0, 21.0 / 530.0);     glVertex3d(0.5, 1.0, 0.0);        // 오른쪽 위
+    glTexCoord2d(17.0 / 800.0, 53.0 / 530.0);     glVertex3d(0.5, -1.0, 0.0);       // 오른쪽 아래
     glEnd();
 }
 
