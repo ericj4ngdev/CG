@@ -72,7 +72,7 @@ void Player::Render()
 		DWORD currentTime = GetTickCount64(); // 현재 시간 측정
 
 		// 경과 시간이 0.25초가 되면 사각형 그리기 중단
-		if ((currentTime - startTime) >= 250)
+		if ((currentTime - startTime) >= 500)
 			isAttack = false;
 
 		Attack();

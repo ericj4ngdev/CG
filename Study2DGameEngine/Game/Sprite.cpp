@@ -57,14 +57,11 @@ void Sprite::DrawBox(float size)
 		glBegin(GL_QUADS);
 		glNormal3fv(&n[i][0]);					// 현재 면의 법선 벡터를 설정
 
-		glTexCoord2f(0, 1);						// 텍스처 좌표 설정
-		glVertex3fv(&v[faces[i][0]][0]);		// 정점 좌표를 설정. 면그리기
-		glTexCoord2f(0, 0);
-		glVertex3fv(&v[faces[i][1]][0]);
-		glTexCoord2f(1, 0);
-		glVertex3fv(&v[faces[i][2]][0]);
-		glTexCoord2f(1, 1);
-		glVertex3fv(&v[faces[i][3]][0]);
+		// 텍스처 좌표 설정		// 정점 좌표를 설정. 면그리기
+		glTexCoord2f(0, 1);		glVertex3fv(&v[faces[i][0]][0]);		
+		glTexCoord2f(0, 0);		glVertex3fv(&v[faces[i][1]][0]);
+		glTexCoord2f(1, 0);		glVertex3fv(&v[faces[i][2]][0]);
+		glTexCoord2f(1, 1);		glVertex3fv(&v[faces[i][3]][0]);
 
 		glEnd();
 	}
