@@ -14,6 +14,18 @@ int k = 0;
 bool isinc = true;
 bool isDown = false;
 bool isStream = false;
+float y = -0.5f;
+bool isIdle = true;
+bool isWalk = true;
+bool isAttack = true;
+
+enum State
+{
+    IDLE,
+    WALK,
+    ATTACK,
+};
+State currentState = IDLE;
 
 // 키 입력함수
 static int KeyDown(int vk)
@@ -73,22 +85,26 @@ void Idle()
 
     glTexCoord2d(8 / 433.0, 146 / 742.0);     glVertex3d(-4.0 / 15.0, -0.5, 0.0);      // 왼쪽 아래    
     glTexCoord2d(8 / 433.0, 115 / 742.0);     glVertex3d(-4.0 / 15.0, 0.5, 0.0);       // 왼쪽 위
-    glTexCoord2d(25 / 433.0, 115 / 742.0);     glVertex3d(4.0 / 15.0, 0.5, 0.0);        // 오른쪽 위
-    glTexCoord2d(25 / 433.0, 146 / 742.0);     glVertex3d(4.0 / 15.0, -0.5, 0.0);       // 오른쪽 아래
+    glTexCoord2d(25 / 433.0, 115 / 742.0);     glVertex3d(4.0 / 15.0, 0.5, 0.0);       // 오른쪽 위
+    glTexCoord2d(25 / 433.0, 146 / 742.0);     glVertex3d(4.0 / 15.0, -0.5, 0.0);      // 오른쪽 아래
 
     glEnd();
 }
 
 void Walk(int x)        // Walk
 {
+    
     glBegin(GL_POLYGON);
 
-        glTexCoord2d((8 + 40 * x ) / 433.0, 146 / 742.0);     glVertex3d(-4.0 / 15.0, -0.5, 0.0);      // 왼쪽 아래    
+        glTexCoord2d((8 + 40 * x ) / 433.0, 146 / 742.0);     glVertex3f(-4.0 / 15.0, -0.5, 0.0);      // 왼쪽 아래    
         glTexCoord2d((8 + 40 * x ) / 433.0, 115 / 742.0);     glVertex3d(-4.0 / 15.0, 0.5, 0.0);       // 왼쪽 위
         glTexCoord2d((25 + 40 * x ) / 433.0, 115 / 742.0);     glVertex3d(4.0 / 15.0, 0.5, 0.0);        // 오른쪽 위
         glTexCoord2d((25 + 40 * x ) / 433.0, 146 / 742.0);     glVertex3d(4.0 / 15.0, -0.5, 0.0);       // 오른쪽 아래
-    
+
     glEnd();
+    // y = y + 0.1f;
+    // glLoadIdentity();
+    // glTranslatef(y, 0.5, 0);
 }
 
 void Attack(int x)
@@ -114,46 +130,108 @@ void Attack(int x)
 
 void InputKey()
 {
-    // printf("%d", i);
+    // 맨처음엔 isDown이 false이어서 입력 가능
     if (KeyDown(VK_RIGHT) && !isDown)
-    {
-        startTime = GetTickCount64();      // 누른 시점
+    {        
+        startTime = GetTickCount64();     // 누른 시점
+        isIdle = false;
+        isWalk = true;
         isDown = true;
     }
+    else {
+        isIdle = true;
+    }
+    
+    // 입력 종료
+    if (!KeyDown(VK_RIGHT)) { isWalk = false; isIdle = true;  isDown = false;  i = 0; }
+
     DWORD currentTime = GetTickCount64();         // 시스템 시간 
-    if (isDown)
+    
+    // 눌리면 실행
+    if (isDown) 
     {
+        // 애니메이션 전환부
         if ((currentTime - startTime) >= 200)     // 0.2초
         {
             if (i == 0) { isinc = true; }
             if (i == 2) { isinc = false; }
             if (isinc) i++;
             else i--;
-            isDown = false;                       // 다시 누를수 있게 함
+            // 전환 후, 다시 입력 가능
+            isDown = false;
         }
     }
-    Walk(i);
+    // 눌렸다면 0.2초간 startTime 은 고정    
+    
+    Walk(i);    
 }
-
+void Animation(float x) {
+    DWORD currentTime = GetTickCount64();
+    // 0.2초 뒤에 다음 장면 재생
+    if ((currentTime - x) >= 200)  k++;
+    // 계속 랜더링
+    Attack(k);
+    printf("print");
+    
+    // k = 0;
+}
 void InputKey_2()
 {
     if ((KeyDown('Z') || KeyDown('z')) && !isDown)
     {
         startTime = GetTickCount64();      // 누른 시점
+        isIdle = false;
+        isAttack = true;
         isDown = true;
+        
+        Animation(startTime);
     }
+    else isIdle = true;
 
-    DWORD currentTime = GetTickCount64();         // 시스템 시간 
-    if (isDown)
+    // 입력 종료코드
+    if (!(KeyDown('Z') || KeyDown('z')))
     {
-        if ((currentTime - startTime) >= 200)     // 0.2초
-        {
-            if (k == 2) { k = 0; }
-            else k++;
-            isDown = false;                       // 다시 누를수 있게 함
-        }
+        isDown = false; isAttack = false;
     }
     Attack(k);
+}
+
+
+
+void controller() {    
+    // printf("before : %d \n", currentState);
+    // printf("%d", i);
+    if (KeyDown(VK_RIGHT)) 
+    {
+        currentState = WALK;
+    }
+    if (KeyDown('Z') || KeyDown('z')) 
+    {
+        currentState = ATTACK;
+    }
+
+    switch (currentState) {
+    case IDLE:
+        Idle();
+        break;
+    case WALK:
+        InputKey();
+        if (!isWalk) {
+            // i = 0;
+            currentState = IDLE;
+        }
+        break;
+    case ATTACK:
+        InputKey_2();
+        if (!isAttack) {
+            currentState = IDLE;
+        }
+        break;
+    default:
+        std::cout << "Invalid state" << std::endl;
+        break;
+    }
+    // printf("after : %d \n", currentState);    
 }
 
 
@@ -161,13 +239,14 @@ void display()
 {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // InputKey();
-    InputKey_2();
-    // Attack(k);
-    // Walk();
+    
+    controller();
+    
+    // InputKey_2();
     glutSwapBuffers();
 }
+
+
 
 void reshape(GLint w, GLint h) {
     glViewport(0, 0, w, h);

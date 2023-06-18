@@ -25,9 +25,10 @@ void Texture::LoadImage(const char* texFile)
     image = stbi_load_from_file(fp, &width, &height, &channel, 4);
     fclose(fp);
 
+    // texture 설정
     if (image != NULL) 
     {
-        // 상하 반전을 위해 이미지 데이터를 복사하여 처리합니다.
+        // 상하 반전을 위해 이미지 데이터를 복사하여 처리
         unsigned char* flippedImage = new unsigned char[width * height * 4];
         for (int y = 0; y < height; ++y)
         {

@@ -12,7 +12,7 @@ Stage::~Stage()
 
 void Stage::init() 
 {
-	mPlayer.initTexture("Game/Image/player.png");
+	mPlayer.initTexture("Game/Image/castlevania3.png");
 	
 	mZombie.SetmPos(550, 850 / 2);
 	mZombie.initTexture("Game/Image/Zombie1.png");
@@ -166,6 +166,7 @@ void Stage::FrameMove()
 {	
 	// printf("%d\n", mPlayer.OnGround);
 	mPlayer.Move();
+	mPlayer.Controller();
 	mPlayer.mVelo.x = 3;
 	// 화면 절반 넘으면 맵이 이동
 	if (mPlayer.mPos.x > (int)g_Extern.WINDOWSIZE_WIDTH / 2)

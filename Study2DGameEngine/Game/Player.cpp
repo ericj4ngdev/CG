@@ -16,6 +16,7 @@ void Player::initPos() {
 	loadTexture();
 }
 
+// 이미지 로드하고 텍스쳐 입히기
 void Player::initTexture(const char *name) {
 	mPos = Vector2D(150, 850/2);		// 초기위치
 	mVelo = Vector2D(2, 2);
@@ -24,7 +25,6 @@ void Player::initTexture(const char *name) {
 	m_Tex.LoadImage(name);
 	m_Texid = NULL;
 	m_Texid = *m_Tex.GetTexture();
-	// mSize = m_Tex.GetSize();
 
 	mColor = Color4f(1, 1, 1, 1);
 	gravity = 5;
@@ -32,7 +32,12 @@ void Player::initTexture(const char *name) {
 	OnCollide = false;
 	JumpPower = 0;
 	MoveSpeed = 2.0f;
-	isAttack = false;
+	isIdle = true;
+	isWalk = true;
+	isAttack = true;
+	isinc = true;
+	isDown = false;
+	count = 0;
 }
 
 void Player::Transform()
@@ -60,10 +65,13 @@ void Player::Render()
 	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
 	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
 
+
 	glTranslatef(mPos.x, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
 	glScalef(-mSize.x, mSize.y, 1);
+	Controller();
 
-	DrawBox(1);
+	// 잘라 넣어야 하는데...
+	// DrawBox(1);
 
 	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
 	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
@@ -77,7 +85,6 @@ void Player::Render()
 
 		Attack();
 	}
-
 }
 
 bool Player::Collide(Sprite other)
@@ -97,6 +104,196 @@ bool Player::Collide(Sprite other)
 	return false; // 충돌 하지 않음.
 }
 
+void Player::Idle()
+{
+	static GLfloat n[6][3] =
+	{
+		{-1.0, 0.0, 0.0},
+		{0.0, 1.0, 0.0},
+		{1.0, 0.0, 0.0},
+		{0.0, -1.0, 0.0},
+		{0.0, 0.0, 1.0},
+		{0.0, 0.0, -1.0}
+	};
+	static GLint faces[6][4] =
+	{
+		{0, 1, 2, 3},
+		{3, 2, 6, 7},
+		{7, 6, 5, 4},
+		{4, 5, 1, 0},
+		{5, 6, 2, 1},
+		{7, 4, 0, 3}
+	};
+	GLfloat v[8][3];
+
+	// 나중에 캐릭터 반전 줄떄, x좌표 부호 반대로 하면 될듯... 
+	// v[0][0] = v[1][0] = v[2][0] = v[3][0] = size / 2;
+	// v[4][0] = v[5][0] = v[6][0] = v[7][0] = -size / 2;
+	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -0.5;	
+	v[4][0] = v[5][0] = v[6][0] = v[7][0] = 0.5;
+	v[0][1] = v[1][1] = v[4][1] = v[5][1] = -0.5;
+	v[2][1] = v[3][1] = v[6][1] = v[7][1] = 0.5;
+	v[0][2] = v[3][2] = v[4][2] = v[7][2] = -0.5;
+	v[1][2] = v[2][2] = v[5][2] = v[6][2] = 0.5;
+
+	//for (int i = 0; i < 6; i++)
+	//{
+	int i = 5;
+		glBegin(GL_POLYGON);
+		glNormal3fv(&n[i][0]);					// 현재 면의 법선 벡터를 설정
+
+		// 텍스처 좌표 설정		// 정점 좌표를 설정. 면그리기
+		glTexCoord2f(8 / 433.0, 1 - (115 / 742.0)); 	glVertex3fv(&v[faces[i][0]][0]);		// 왼쪽 아래		(0,1) 
+		glTexCoord2f(8 / 433.0, 1 - (146 / 742.0)); glVertex3fv(&v[faces[i][1]][0]);			// 왼쪽 위		(0,0)
+		glTexCoord2f(25 / 433.0, 1 - (146 / 742.0));	glVertex3fv(&v[faces[i][2]][0]);		// 오른쪽 위		(1,0)
+		glTexCoord2f(25 / 433.0, 1 - (115 / 742.0));		glVertex3fv(&v[faces[i][3]][0]);	// 오른쪽 아래	(1,1)
+
+		glEnd();
+	
+}
+
+void Player::Walk(int x) {
+
+	static GLfloat n[6][3] =
+	{
+		{-1.0, 0.0, 0.0},
+		{0.0, 1.0, 0.0},
+		{1.0, 0.0, 0.0},
+		{0.0, -1.0, 0.0},
+		{0.0, 0.0, 1.0},
+		{0.0, 0.0, -1.0}
+	};
+	static GLint faces[6][4] =
+	{
+		{0, 1, 2, 3},
+		{3, 2, 6, 7},
+		{7, 6, 5, 4},
+		{4, 5, 1, 0},
+		{5, 6, 2, 1},
+		{7, 4, 0, 3}
+	};
+	GLfloat v[8][3];
+
+	// 나중에 캐릭터 반전 줄떄, x좌표 부호 반대로 하면 될듯... 
+	// v[0][0] = v[1][0] = v[2][0] = v[3][0] = size / 2;
+	// v[4][0] = v[5][0] = v[6][0] = v[7][0] = -size / 2;
+	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -0.5;
+	v[4][0] = v[5][0] = v[6][0] = v[7][0] = 0.5;
+	v[0][1] = v[1][1] = v[4][1] = v[5][1] = -0.5;
+	v[2][1] = v[3][1] = v[6][1] = v[7][1] = 0.5;
+	v[0][2] = v[3][2] = v[4][2] = v[7][2] = -0.5;
+	v[1][2] = v[2][2] = v[5][2] = v[6][2] = 0.5;
+
+	int i = 5;
+	glBegin(GL_POLYGON);
+	glNormal3fv(&n[i][0]);					// 현재 면의 법선 벡터를 설정
+
+	// 텍스처 좌표 설정		// 정점 좌표를 설정. 면그리기
+	glTexCoord2f((8 + 40 * x) / 433.0,  1 - (115 / 742.0)); 	glVertex3fv(&v[faces[i][0]][0]);	
+	glTexCoord2f((8 + 40 * x) / 433.0,  1 - (146 / 742.0));		glVertex3fv(&v[faces[i][1]][0]);	
+	glTexCoord2f((25 + 40 * x) / 433.0, 1 - (146 / 742.0));		glVertex3fv(&v[faces[i][2]][0]);	
+	glTexCoord2f((25 + 40 * x) / 433.0, 1 - (115 / 742.0));		glVertex3fv(&v[faces[i][3]][0]);	
+
+	glEnd();
+}
+
+void Player::InputWalkKey()
+{
+	// 맨처음엔 isDown이 false이어서 입력 가능
+	if (KeyDown(VK_RIGHT) && !isDown)
+	{
+		startTime = GetTickCount64();     // 누른 시점
+		isIdle = false;
+		isWalk = true;
+		isDown = true;
+	}
+	else isIdle = true;
+
+	// 입력 종료
+	if (!KeyDown(VK_RIGHT)) { isWalk = false; isIdle = true;  isDown = false;  count = 0;}
+
+	DWORD currentTime = GetTickCount64();         // 시스템 시간 
+
+	// 눌리면 실행
+	if (isDown)
+	{
+		// 애니메이션 전환부
+		if ((currentTime - startTime) >= 150)     // 0.2초
+		{
+			if (count == 0) { isinc = true; }
+			if (count == 2) { isinc = false; }
+			if (isinc) count++;
+			else count--;
+			// 전환 후, 다시 입력 가능
+			isDown = false;
+		}
+	}
+	// 눌렸다면 0.2초간 startTime 은 고정    
+
+	Walk(count);
+}
+
+
+void Player::Attack(int x)
+{
+	glBegin(GL_POLYGON);
+	if (x == 2) // 채찍
+	{
+		glTexCoord2d(92 / 433.0, 186 / 742.0);     glVertex3d(-0.5, -0.33, 0.0);      // 왼쪽 아래    
+		glTexCoord2d(92 / 433.0, 153 / 742.0);     glVertex3d(-0.5, 0.33, 0.0);       // 왼쪽 위
+		glTexCoord2d(142 / 433.0, 153 / 742.0);     glVertex3d(0.5, 0.33, 0.0);        // 오른쪽 위
+		glTexCoord2d(142 / 433.0, 186 / 742.0);     glVertex3d(0.5, -0.33, 0.0);       // 오른쪽 아래
+	}
+	else
+	{
+		glTexCoord2d((1 + 40 * x) / 433.0, 186 / 742.0);     glVertex3d(-0.75, -0.33, 0.0);       // 왼쪽 아래    
+		glTexCoord2d((1 + 40 * x) / 433.0, 153 / 742.0);     glVertex3d(-0.75, 0.33, 0.0);        // 왼쪽 위
+		glTexCoord2d((33 + 40 * x) / 433.0, 153 / 742.0);     glVertex3d(-0.15, 0.33, 0.0);         // 오른쪽 위
+		glTexCoord2d((33 + 40 * x) / 433.0, 186 / 742.0);     glVertex3d(-0.15, -0.33, 0.0);        // 오른쪽 아래
+	}
+
+	glEnd();
+}
+
+void Player::InputAttackKey() {
+
+}
+
+
+void Player::Controller()
+{
+	printf("%d", count);
+	if (KeyDown(VK_RIGHT))
+	{
+		currentState = WALK;
+	}
+	if (KeyDown('Z') || KeyDown('z'))
+	{
+		currentState = ATTACK;
+	}
+
+	switch (currentState) {
+	case IDLE:
+		Idle();
+		break;
+	case WALK:
+		InputWalkKey();
+		if (!isWalk) {
+			currentState = IDLE;
+		}
+		break;
+	case ATTACK:
+		// InputKey_2();
+		// if (!isAttack) {
+		// 	currentState = IDLE;
+		// }
+		break;
+	default:
+		std::cout << "Invalid state" << std::endl;
+		break;
+	}
+}
+
 void Player::Move()
 {
 	mPos.y += gravity - JumpPower;
@@ -108,7 +305,7 @@ void Player::Move()
 
 	if (KeyDown(VK_LEFT))
 	{
-		mPos.x -= mVelo.x;
+		mPos.x -= mVelo.x;		
 	}
 
 	if (KeyDown(VK_RIGHT))
@@ -131,6 +328,8 @@ void Player::Move()
 	}
 	OnGround = false;
 }
+
+
 
 void Player::Attack() 
 {
