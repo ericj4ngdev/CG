@@ -13,7 +13,6 @@ int i = 0;
 int k = 0;
 bool isinc = true;
 bool isDown = false;
-bool isStream = false;
 float y = -0.5f;
 bool isIdle = true;
 bool isWalk = true;
@@ -83,10 +82,10 @@ void Idle()
 {
     glBegin(GL_POLYGON);
 
-    glTexCoord2d(8 / 433.0, 146 / 742.0);     glVertex3d(-4.0 / 15.0, -0.5, 0.0);      // 왼쪽 아래    
-    glTexCoord2d(8 / 433.0, 115 / 742.0);     glVertex3d(-4.0 / 15.0, 0.5, 0.0);       // 왼쪽 위
-    glTexCoord2d(25 / 433.0, 115 / 742.0);     glVertex3d(4.0 / 15.0, 0.5, 0.0);       // 오른쪽 위
-    glTexCoord2d(25 / 433.0, 146 / 742.0);     glVertex3d(4.0 / 15.0, -0.5, 0.0);      // 오른쪽 아래
+    glTexCoord2d(8 / 433.0, 146 / 742.0);       glVertex3d(-4.0 / 15.0, -0.5, 0.0);      // 왼쪽 아래    
+    glTexCoord2d(8 / 433.0, 115 / 742.0);       glVertex3d(-4.0 / 15.0, 0.5, 0.0);       // 왼쪽 위
+    glTexCoord2d(25 / 433.0, 115 / 742.0);      glVertex3d(4.0 / 15.0, 0.5, 0.0);       // 오른쪽 위
+    glTexCoord2d(25 / 433.0, 146 / 742.0);      glVertex3d(4.0 / 15.0, -0.5, 0.0);      // 오른쪽 아래
 
     glEnd();
 }
@@ -151,7 +150,7 @@ void InputKey()
     if (isDown) 
     {
         // 애니메이션 전환부
-        if ((currentTime - startTime) >= 200)     // 0.2초
+        if ((currentTime - startTime) >= 120)     // 0.2초
         {
             if (i == 0) { isinc = true; }
             if (i == 2) { isinc = false; }
@@ -165,16 +164,44 @@ void InputKey()
     
     Walk(i);    
 }
-void Animation(float x) {
+
+void test() 
+{
+    if ((KeyDown('Z') || KeyDown('z')) && !isDown)
+    {
+        startTime = GetTickCount64();      // 누른 시점
+        isDown = true;
+    }
+
+    if (!(KeyDown('Z') || KeyDown('z')))
+    {
+        // isDown = false;
+    }
     DWORD currentTime = GetTickCount64();
+    int gap = currentTime - startTime;
     // 0.2초 뒤에 다음 장면 재생
-    if ((currentTime - x) >= 200)  k++;
-    // 계속 랜더링
+    // 누르는 동안 isDown은 true이므로 누르는 동안에만 재생
+    if (isDown)
+    {
+        // printf("c : %d   s : %d 차이 : %d \n", currentTime, startTime, currentTime - startTime);
+        // 애니메이션 전환부
+        if (gap >= 100)     // 0.2초동안 계속 증가해서 슬랩스틱이 되었다..
+        {
+            if(k == 0) k++;
+        }
+        if (gap >= 200) {
+            if(k == 1) k++;
+        }
+        // 0.6초 뒤에 false로 바꿔줌으로써 한번 누르면 자동으로 3장면이 재생되게 함
+        if (gap >= 350) 
+        {
+            if(k == 2) k = 0;
+            isDown = false;
+        }
+    }
     Attack(k);
-    printf("print");
-    
-    // k = 0;
 }
+
 void InputKey_2()
 {
     if ((KeyDown('Z') || KeyDown('z')) && !isDown)
@@ -183,20 +210,40 @@ void InputKey_2()
         isIdle = false;
         isAttack = true;
         isDown = true;
-        
-        Animation(startTime);
     }
     else isIdle = true;
 
     // 입력 종료코드
     if (!(KeyDown('Z') || KeyDown('z')))
     {
-        isDown = false; isAttack = false;
+        // isAttack = false;
+    }
+
+    DWORD currentTime = GetTickCount64();
+    int gap = currentTime - startTime;
+    // 0.2초 뒤에 다음 장면 재생
+    // 누르는 동안 isDown은 true이므로 누르는 동안에만 재생
+    if (isDown)
+    {
+        // printf("c : %d   s : %d 차이 : %d \n", currentTime, startTime, currentTime - startTime);
+        // 애니메이션 전환부
+        if (gap >= 100)     // 0.2초동안 계속 증가해서 슬랩스틱이 되었다..
+        {
+            if (k == 0) k++;
+        }
+        if (gap >= 200) {
+            if (k == 1) k++;
+        }
+        // 0.6초 뒤에 false로 바꿔줌으로써 한번 누르면 자동으로 3장면이 재생되게 함
+        if (gap >= 400)
+        {
+            if (k == 2) k = 0;
+            isDown = false;
+            isAttack = false;
+        }
     }
     Attack(k);
 }
-
-
 
 void controller() {    
     // printf("before : %d \n", currentState);
@@ -234,14 +281,13 @@ void controller() {
     // printf("after : %d \n", currentState);    
 }
 
-
 void display()
 {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     controller();
-    
+    // test();
     // InputKey_2();
     glutSwapBuffers();
 }

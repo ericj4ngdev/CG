@@ -1,5 +1,14 @@
 #ifndef PLAYER_H_
-#define PLAYER_H_
+#define PLAYER_H_	
+enum State
+{
+	IDLE,
+	WALK,
+	ATTACK,
+	JUMP,
+	SIT,
+};
+
 class Player : public Sprite
 {
 public:
@@ -11,15 +20,14 @@ public:
 	bool isIdle;
 	bool isWalk;
 	bool isAttack;
+	bool isJump;
+	bool isSit;
 	bool isDown;
 	bool isinc;
+	int keydownCount;
 	int count;
-	enum State
-	{
-		IDLE,
-		WALK,
-		ATTACK,
-	};
+	int direction;
+
 	State currentState;
 
 public:
@@ -29,12 +37,20 @@ public:
 	void Transform() override;
 	void Render() override;
 	bool Collide(Sprite other) override;
+
+public:
 	void Idle();
 	void Walk(int x);
 	void Attack(int x);
+	void Jump();
+	void Sit();
+public:
 	void InputWalkKey();
 	void InputAttackKey();
+	void InputJumpKey();
+	void InputSitKey();
 	void Controller();
+public:
 	void Move();
 	void Attack();
 

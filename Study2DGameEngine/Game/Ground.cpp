@@ -115,11 +115,14 @@ bool Ground::CollidebyVector(Sprite& other)
 			other.mPos.x += PushVector.x;
 		else
 			other.mPos.y += PushVector.y - 4;		// 4는 player의 gravity이다. 
+		
 		other.OnGround = true;						// player의 OnGround 변수를 바꾼다. 
+		// printf(other.OnGround);
 		other.Transform();
 		return true;
 	}
-	// other.OnGround = false;
+
+	other.OnGround = (false || other.OnGround);
 	return false; // 충돌 하지 않음.
 }
 

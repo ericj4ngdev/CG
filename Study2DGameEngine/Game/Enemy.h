@@ -6,7 +6,7 @@ public:
 	Vector2D	mVelo;
 	float MoveSpeed;
 	float gravity;
-	bool OnGround;
+	// bool OnGround;
 	bool OnCollide;
 public:
 	void initPos() override;

@@ -59,8 +59,6 @@ void display()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // glTranslatef(-cameraX, -cameraY, 0.0f);
-
     glViewport(0, 0, g_Extern.WINDOWSIZE_WIDTH, g_Extern.WINDOWSIZE_HEIGHT);
 
     glMatrixMode(GL_PROJECTION);
@@ -72,6 +70,7 @@ void display()
     glClearColor(0.5, 0.5, 0.5, 1.0); // 화면을 지우고 초기화할 때 사용할 색상을 설정합니다. 이 코드에서는 회색 배경색을 지정
     Render();
     glutSwapBuffers();      // 백버퍼와 프론트버퍼를 교환하여 화면에 그려진 결과를 표시
+
 }
 
 void onIdle()

@@ -130,9 +130,13 @@ void Stage::Transform() {
 
 void Stage::Collide()
 {
+	mPlayer.OnGround = false;
+	mZombie.OnGround = false;
+	mLeopard.OnGround = false;
+
 	for (int i = 0; i < 96; i++)
 	{
-		arrground[i].CollidebyVector(mPlayer);
+		arrground[i].CollidebyVector(mPlayer);		
 		arrground[i].CollidebyVector(mZombie);
 		arrground[i].CollidebyVector(mLeopard);
 	}
@@ -160,13 +164,14 @@ void Stage::Collide()
 		arrPlatform4[i].CollidebyVector(mZombie);
 		arrPlatform4[i].CollidebyVector(mLeopard);
 	}
+	// mPlayer
 }
 
 void Stage::FrameMove()
 {	
 	// printf("%d\n", mPlayer.OnGround);
 	mPlayer.Move();
-	mPlayer.Controller();
+	// mPlayer.Controller();
 	mPlayer.mVelo.x = 3;
 	// 화면 절반 넘으면 맵이 이동
 	if (mPlayer.mPos.x > (int)g_Extern.WINDOWSIZE_WIDTH / 2)
