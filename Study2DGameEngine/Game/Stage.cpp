@@ -144,6 +144,8 @@ void Stage::Collide()
 	mLeopard.OnGround = false;
 	test.CollidebyVector(mPlayer);
 
+	mPlayer.DrawCollide(mZombie);
+
 	for (int i = 0; i < 96; i++)
 	{
 		arrground[i].CollidebyVector(mPlayer);		
@@ -180,7 +182,7 @@ void Stage::Collide()
 void Stage::FrameMove()
 {	
 	// printf("%d\n", mPlayer.OnGround);
-	mPlayer.Move();
+	mPlayer.InputController();
 	// mPlayer.Controller();
 	mPlayer.mVelo.x = 3;
 	// 화면 절반 넘으면 맵이 이동
@@ -243,6 +245,6 @@ void Stage::FrameMove()
 		}
 	}
 	
-	mZombie.Move();
+	mZombie.InputController();
 	// mLeopard.Move();
 }

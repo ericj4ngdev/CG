@@ -13,6 +13,7 @@ void Player::initPos() {
 	JumpPower = 0;
 	MoveSpeed = 2.0f;
 	isAttack = false;
+	attackRange = 0;
 	loadTexture();
 }
 
@@ -38,8 +39,9 @@ void Player::initTexture(const char *name) {
 	isJump = true;
 	isSit = true;
 
+	isKeyDown = false;
 	isinc = true;
-	isDown = false;
+	attackRange = 0;
 	keydownCount = 0;
 	count = 0;
 	direction = 1;
@@ -48,15 +50,15 @@ void Player::initTexture(const char *name) {
 void Player::Transform()
 {
 	// printf("%f , %f  ", mPos.x, mPos.y);
-	Top = mPos.y - mSize.y / 2;
-	Bottom = mPos.y + mSize.y / 2;
-	Right = mPos.x + mSize.x / 2;
-	Left = mPos.x - mSize.x / 2;
+	mTop = mPos.y - mSize.y / 2;
+	mBottom = mPos.y + mSize.y / 2;
+	mRight = mPos.x + mSize.x / 2;
+	mLeft = mPos.x - mSize.x / 2;
 
-	vLT = Vector2D(Left, Top);
-	vRT = Vector2D(Right, Top);
-	vRB = Vector2D(Right, Bottom);
-	vLB = Vector2D(Left, Bottom);
+	vLT = Vector2D(mLeft, mTop);
+	vRT = Vector2D(mRight, mTop);
+	vRB = Vector2D(mRight, mBottom);
+	vLB = Vector2D(mLeft, mBottom);
 }
 
 void Player::Render()
@@ -75,10 +77,7 @@ void Player::Render()
 	glTranslatef(mPos.x, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
 	glScalef(-mSize.x * direction, mSize.y, 1);
 	
-	Controller();
-
-	// 잘라 넣어야 하는데...
-	// DrawBox(1);
+	StateMachine();
 
 	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
 	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
@@ -97,13 +96,10 @@ void Player::Render()
 
 bool Player::Collide(Sprite other)
 {
-	// 축 검사해서 겹치면 
-	// bottom > other.top (일반 좌표)
-	// 실시간이라 변수로 계산 X
-	if ((Right >= other.Left)
-		&& (Left <= other.Right)
-		&& (Bottom >= other.Top)
-		&& (Top <= other.Bottom))
+	if ((mRight >= other.mLeft)
+		&& (mLeft <= other.mRight)
+		&& (mBottom >= other.mTop)
+		&& (mTop <= other.mBottom))
 	{
 		OnCollide = true;
 		return true;
@@ -208,24 +204,24 @@ void Player::Walk(int x) {
 void Player::InputWalkKey()
 {
 	// 맨처음엔 isDown이 false이어서 입력 가능
-	if (KeyDown(VK_RIGHT) && !isDown)
+	if (KeyDown(VK_RIGHT) && !isKeyDown)
 	{
 		direction = 1;
 		startTime = GetTickCount64();     // 누른 시점
 		isIdle = false;
 		isWalk = true;
-		isDown = true;
+		isKeyDown = true;
 	}
 	else isIdle = true;
 
-	if (KeyDown(VK_LEFT) && !isDown)
+	if (KeyDown(VK_LEFT) && !isKeyDown)
 	{
 		direction = -1;
 		// glScalef(mSize.x, mSize.y, 1);
 		startTime = GetTickCount64();     // 누른 시점
 		isIdle = false;
 		isWalk = true;
-		isDown = true;
+		isKeyDown = true;
 	}
 	else isIdle = true;
 
@@ -234,14 +230,14 @@ void Player::InputWalkKey()
 	{ 
 		isWalk = false; 
 		isIdle = true;  
-		isDown = false;  
+		isKeyDown = false;  
 		count = 0;
 	}
 
 	DWORD currentTime = GetTickCount64();         // 시스템 시간 
 
 	// 눌리면 실행
-	if (isDown)
+	if (isKeyDown)
 	{
 		// 애니메이션 전환부
 		if ((currentTime - startTime) >= 120)     // 0.2초
@@ -251,7 +247,7 @@ void Player::InputWalkKey()
 			if (isinc) count++;
 			else count--;
 			// 전환 후, 다시 입력 가능
-			isDown = false;
+			isKeyDown = false;
 		}
 	}
 	// 눌렸다면 0.2초간 startTime 은 고정    
@@ -281,12 +277,6 @@ void Player::Attack(int x)
 	};
 	GLfloat v[8][3];
 
-	// 여기는 Scale 주는 부분 
-	// 나중에 캐릭터 반전 줄떄, x좌표 부호 반대로 하면 될듯... 
-	// v[0][0] = v[1][0] = v[2][0] = v[3][0] = size / 2;
-	// v[4][0] = v[5][0] = v[6][0] = v[7][0] = -size / 2;
-	// v[0][0] = v[1][0] = v[2][0] = v[3][0] = -0.5;
-	// v[4][0] = v[5][0] = v[6][0] = v[7][0] = 1.5;
 	v[0][1] = v[1][1] = v[4][1] = v[5][1] = -0.5;
 	v[2][1] = v[3][1] = v[6][1] = v[7][1] = 0.5;
 	v[0][2] = v[3][2] = v[4][2] = v[7][2] = -0.5;
@@ -298,7 +288,6 @@ void Player::Attack(int x)
 	if (x == 2) // 채찍
 	{	
 		v[0][0] = v[1][0] = v[2][0] = v[3][0] = -2.5;
-
 		v[4][0] = v[5][0] = v[6][0] = v[7][0] = 0.5;
 		// 자를 위치 조정
 		glTexCoord2f(92 / 433.0, 1 - (154 / 742.0));     glVertex3fv(&v[faces[i][0]][0]);      // 왼쪽 아래    
@@ -320,13 +309,13 @@ void Player::Attack(int x)
 }	
 
 void Player::InputAttackKey() {
-	if ((KeyDown('Z') || KeyDown('z')) && !isDown)
+	if ((KeyDown('Z') || KeyDown('z')) && !isKeyDown)
 	{
 		// mPos.x = mPos.x - 10;
 		startTime = GetTickCount64();      // 누른 시점
 		isIdle = false;
 		isAttack = true;
-		isDown = true;		
+		isKeyDown = true;		
 	}
 	else isIdle = true;
 
@@ -340,7 +329,7 @@ void Player::InputAttackKey() {
 	int gap = currentTime - startTime;
 	// 0.2초 뒤에 다음 장면 재생
 	// 누르는 동안 isDown은 true이므로 누르는 동안에만 재생
-	if (isDown)
+	if (isKeyDown)
 	{
 		// printf("c : %d   s : %d 차이 : %d \n", currentTime, startTime, currentTime - startTime);
 		// 애니메이션 전환부
@@ -355,7 +344,7 @@ void Player::InputAttackKey() {
 		if (gap >= 400)
 		{
 			if (count == 2) count = 0;
-			isDown = false;
+			isKeyDown = false;
 			isAttack = false;
 		}
 	}
@@ -405,14 +394,14 @@ void Player::Jump()
 
 void Player::InputJumpKey() {
 	// 누르고서 반응
-	if (isDown)
+	if (isKeyDown)
 	{
 		// 땅 위면 점프모션 해제
 		// OnGround = false이면 jump모션 재생		
 		// std::cout << "InputJumpKey, if문 밖 " << OnGround << '\n';		// 1
 		if (OnGround) 
 		{
-			isDown = false;		// 착지하면 false되서 다시 입력 가능
+			isKeyDown = false;		// 착지하면 false되서 다시 입력 가능
 			isJump = false;		// switch문에서 IDLE로 바뀜. 	
 			// 이거 지우면 서있는 상태로 점프함. 왜그런지 나도 모름. 씨발... 
 			// 계속 누르고 있다면 isDown이 해결해야 하는데 그러지 못한다. 
@@ -426,10 +415,10 @@ void Player::InputJumpKey() {
 	// if (!KeyDown(VK_SPACE)) isDown = false;
 
 	//누르고 있으면 T && F
-	if (KeyDown(VK_SPACE) && !isDown)
+	if (KeyDown(VK_SPACE) && !isKeyDown)
 	{
 		isJump = true;
-		isDown = true;
+		isKeyDown = true;
 		// std::cout << "InputJumpKey, 첫번쨰 if문 " << OnGround << '\n';		// 0
 		Jump();
 	}
@@ -488,12 +477,13 @@ void Player::InputSitKey() {
 	if (!KeyDown(VK_DOWN)) { isSit = false; }
 }
 
-void Player::Controller()
+void Player::StateMachine()
 {
 	// printf("%d", currentState);
 	// printf("%d", count);
 	switch (currentState) {
 		case IDLE:
+			attackRange = 0;
 			Idle();
 			break;
 		case WALK:
@@ -505,6 +495,7 @@ void Player::Controller()
 			break;
 		case ATTACK:
 			InputAttackKey();
+			DrawCollide();
 			if (!isAttack) 
 			{
 				currentState = IDLE;
@@ -530,7 +521,7 @@ void Player::Controller()
 	}
 }
 
-void Player::Move()
+void Player::InputController()
 {
 	mPos.y += gravity - JumpPower;
 	if (JumpPower > 0)
@@ -551,17 +542,20 @@ void Player::Move()
 	}
 
 	// 땅 위에 있음 & space => 점프
-	printf("%d", OnGround);
+	// printf("%d", OnGround);
 	if (KeyDown(VK_SPACE) && OnGround) {
 		currentState = JUMP;
 		JumpPower = 15;
-		// OnGround = false;
 	}
 	if (KeyDown('Z') || KeyDown('z'))
 	{
 		currentState = ATTACK;
-		// PlaySound(L"Game/Sound/SFX 11 - Attack.wav", 0, SND_FILENAME | SND_ASYNC);
-		// isAttack = true;
+		attackRange = 100;
+	}
+
+	if (KeyUp('Z') || KeyUp('z'))
+	{
+		attackRange = 0;
 	}
 
 	if (KeyDown(VK_DOWN))
@@ -571,10 +565,11 @@ void Player::Move()
 	
 }
 
-void Player::Attack() 
+void Player::DrawCollide()
 {
+	// 그리기
 	glPushMatrix();			// 현재 모델뷰 행렬을 스택에 저장하는 함수
-	glBindTexture(GL_TEXTURE_2D, m_Texid);
+	glBindTexture(GL_TEXTURE_2D, NULL);
 	// 현재 활성화된 텍스처 유닛에 2D 텍스처를 바인딩하는 함수
 
 	// 현재의 색상을 설정하는 함수
@@ -583,13 +578,38 @@ void Player::Attack()
 	glMatrixMode(GL_MODELVIEW);			// 현재의 행렬 모드를 설정하는 함수
 	glLoadIdentity();					// 현재 행렬을 단위 행렬로 초기화
 
-	glTranslatef(mPos.x + 150, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
-	glScalef(-mSize.x * 4, mSize.y / 4, 1);
+	glTranslatef(mPos.x + 100, g_Extern.WINDOWSIZE_HEIGHT - mPos.y, 0);
+	glScalef(attackRange, mSize.y / 4, 1);
 
 	DrawBox(1);
 
 	glBindTexture(GL_TEXTURE_2D, 0);		// 텍스처 언바인딩
 	glPopMatrix();			// 스택에 저장된 이전의 모델뷰 행렬을 복원하는 함수
+	// 충돌
+
+}
+
+void Player::DrawCollide(Sprite& other)
+{
+	Vector2D weaponPos(mPos.x + 100, mPos.y);
+	Vector2D weaponSize(0, mSize.y / 4);
+	weaponPos.print();
+
+	float Top = weaponPos.y - weaponSize.y / 2;
+	float Bottom = weaponPos.y + weaponSize.y / 2;
+	float Right = weaponPos.x + weaponSize.x / 2;
+	float Left = weaponPos.x - weaponSize.x / 2;
+
+	// printf("%d \n", attackRange);
+	// 충돌
+	if ((Right >= other.mLeft)
+		&& (Left <= other.mRight)
+		&& (Bottom >= other.mTop)
+		&& (Top <= other.mBottom))
+	{
+		other.Release();			// 텍스처 초기화.
+		other.mColor.a = 0;			// 투명화
+	}	
 }
 
 //void Player::IsGround(Sprite& other) 

@@ -14,7 +14,7 @@ public:
 	void Transform() override;
 	void Render() override;
 	bool Collide(Sprite other) override;
-	void Move();
+	void InputController();
 
 };
 

@@ -22,8 +22,9 @@ public:
 	bool isAttack;
 	bool isJump;
 	bool isSit;
-	bool isDown;
+	bool isKeyDown;
 	bool isinc;
+	int attackRange;
 	int keydownCount;
 	int count;
 	int direction;
@@ -49,11 +50,11 @@ public:
 	void InputAttackKey();
 	void InputJumpKey();
 	void InputSitKey();
-	void Controller();
+	void StateMachine();
 public:
-	void Move();
-	void Attack();
-
+	void InputController();
+	void DrawCollide();
+	void DrawCollide(Sprite& other);
 	// void IsGround(Sprite& other);
 };
 

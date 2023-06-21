@@ -32,15 +32,15 @@ void Enemy::initTexture(const char *name)
 }
 void Enemy::Transform()
 {
-	Top = mPos.y - mSize.y / 2;
-	Bottom = mPos.y + mSize.y / 2;
-	Right = mPos.x + mSize.x / 2;
-	Left = mPos.x - mSize.x / 2;
+	mTop = mPos.y - mSize.y / 2;
+	mBottom = mPos.y + mSize.y / 2;
+	mRight = mPos.x + mSize.x / 2;
+	mLeft = mPos.x - mSize.x / 2;
 
-	vLT = Vector2D(Left, Top);
-	vRT = Vector2D(Right, Top);
-	vRB = Vector2D(Right, Bottom);
-	vLB = Vector2D(Left, Bottom);
+	vLT = Vector2D(mLeft, mTop);
+	vRT = Vector2D(mRight, mTop);
+	vRB = Vector2D(mRight, mBottom);
+	vLB = Vector2D(mLeft, mBottom);
 }
 
 void Enemy::Render()
@@ -70,10 +70,10 @@ bool Enemy::Collide(Sprite other)
 	// 축 검사해서 겹치면 
 	// bottom > other.top (일반 좌표)
 	// 실시간이라 변수로 계산 X
-	if ((Right >= other.Left)
-		&& (Left <= other.Right)
-		&& (Bottom >= other.Top)
-		&& (Top <= other.Bottom))
+	if ((mRight >= other.mLeft)
+		&& (mLeft <= other.mRight)
+		&& (mBottom >= other.mTop)
+		&& (mTop <= other.mBottom))
 	{
 		OnCollide = true;
 		return true;
@@ -82,7 +82,7 @@ bool Enemy::Collide(Sprite other)
 	return false; // 충돌 하지 않음.
 }
 
-void Enemy::Move() 
+void Enemy::InputController() 
 {
 	mPos.y += gravity;
 	mPos.x -= mVelo.x;

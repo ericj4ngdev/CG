@@ -16,15 +16,15 @@ void BackGround::initTexture(const char* name) {
 
 void BackGround::Transform()
 {
-	Top = mPos.y - mSize.y / 2;
-	Bottom = mPos.y + mSize.y / 2;
-	Right = mPos.x + mSize.x / 2;
-	Left = mPos.x - mSize.x / 2;
+	mTop = mPos.y - mSize.y / 2;
+	mBottom = mPos.y + mSize.y / 2;
+	mRight = mPos.x + mSize.x / 2;
+	mLeft = mPos.x - mSize.x / 2;
 
-	vLT = Vector2D(Left, Top);
-	vRT = Vector2D(Right, Top);
-	vRB = Vector2D(Right, Bottom);
-	vLB = Vector2D(Left, Bottom);
+	vLT = Vector2D(mLeft, mTop);
+	vRT = Vector2D(mRight, mTop);
+	vRB = Vector2D(mRight, mBottom);
+	vLB = Vector2D(mLeft, mBottom);
 }
 
 void BackGround::Render()

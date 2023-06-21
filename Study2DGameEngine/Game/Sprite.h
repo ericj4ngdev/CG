@@ -9,10 +9,10 @@ public:
 	GLuint		m_Texid;			// 텍스트 식별자 아이디 생성
 	Texture		m_Tex;
 	Color4f		mColor;
-	float		Top;
-	float		Bottom;
-	float		Left;
-	float		Right;
+	float		mTop;
+	float		mBottom;
+	float		mLeft;
+	float		mRight;
 	Vector2D	vLT;
 	Vector2D	vRT;
 	Vector2D	vRB;
