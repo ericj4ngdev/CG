@@ -4,6 +4,7 @@
 class Stage
 {
 private:
+	BackGround BackGround;
 	Player mPlayer;
 	Enemy mZombie;
 	Enemy mLeopard;
@@ -12,6 +13,7 @@ private:
 	Ground arrPlatform2[10];
 	Ground arrPlatform3[6];
 	Ground arrPlatform4[9];
+	Ground test;
 
 public:
 	Stage();

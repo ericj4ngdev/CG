@@ -47,6 +47,7 @@ void Player::initTexture(const char *name) {
 
 void Player::Transform()
 {
+	// printf("%f , %f  ", mPos.x, mPos.y);
 	Top = mPos.y - mSize.y / 2;
 	Bottom = mPos.y + mSize.y / 2;
 	Right = mPos.x + mSize.x / 2;
@@ -408,16 +409,16 @@ void Player::InputJumpKey() {
 	{
 		// 땅 위면 점프모션 해제
 		// OnGround = false이면 jump모션 재생		
-		std::cout << "InputJumpKey, if문 밖 " << OnGround << '\n';		// 1
+		// std::cout << "InputJumpKey, if문 밖 " << OnGround << '\n';		// 1
 		if (OnGround) 
 		{
 			isDown = false;		// 착지하면 false되서 다시 입력 가능
-			isJump = false;		// switch문에서 IDLE로 바뀜. 근데 씨발 계속 점프하고 지랄한다. 	
+			isJump = false;		// switch문에서 IDLE로 바뀜. 	
 			// 이거 지우면 서있는 상태로 점프함. 왜그런지 나도 모름. 씨발... 
-			// 계속 누르고 있다면 isDown이 해결해야 하는데 그러지 못한다. isDown이 false가 되면 입력이 가능해지고 또 점프지랄을 할 것이다. 
+			// 계속 누르고 있다면 isDown이 해결해야 하는데 그러지 못한다. 
 			// 그게 문제
 			// 또 변수 만들자고??
-			std::cout << "InputJumpKey, if문 안 " << OnGround << '\n';		// 1
+			// std::cout << "InputJumpKey, if문 안 " << OnGround << '\n';		// 1
 		}
 		Jump();
 	}
@@ -429,7 +430,7 @@ void Player::InputJumpKey() {
 	{
 		isJump = true;
 		isDown = true;
-		std::cout << "InputJumpKey, 첫번쨰 if문 " << OnGround << '\n';		// 0
+		// std::cout << "InputJumpKey, 첫번쨰 if문 " << OnGround << '\n';		// 0
 		Jump();
 	}
 }
@@ -550,6 +551,7 @@ void Player::Move()
 	}
 
 	// 땅 위에 있음 & space => 점프
+	printf("%d", OnGround);
 	if (KeyDown(VK_SPACE) && OnGround) {
 		currentState = JUMP;
 		JumpPower = 15;
@@ -558,6 +560,7 @@ void Player::Move()
 	if (KeyDown('Z') || KeyDown('z'))
 	{
 		currentState = ATTACK;
+		// PlaySound(L"Game/Sound/SFX 11 - Attack.wav", 0, SND_FILENAME | SND_ASYNC);
 		// isAttack = true;
 	}
 

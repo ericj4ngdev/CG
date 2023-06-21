@@ -12,12 +12,15 @@ Stage::~Stage()
 
 void Stage::init() 
 {
-	mPlayer.initTexture("Game/Image/castlevania3.png");
-	
+	BackGround.initTexture("Game/Image/CastlevaniaLevel1.png");
+	mPlayer.initTexture("Game/Image/castlevania3.png");	
 	mZombie.SetmPos(550, 850 / 2);
 	mZombie.initTexture("Game/Image/Zombie1.png");
 	mLeopard.SetmPos(25 + 50 * (16 * 3 - 5) + 2 * 50, 462.5 - 50 * 6 + 25);
 	mLeopard.initTexture("Game/Image/Black Leopard.png");
+
+	test.SetmPos(300, 300);
+	test.initTexture("Game/Image/block.png");
 
 	for (int i = 0; i < 96; i++)
 	{
@@ -48,9 +51,11 @@ void Stage::init()
 
 void Stage::Release() 
 {
+	BackGround.Release();
 	mPlayer.Release();
 	mZombie.Release();
 	mLeopard.Release();
+	test.Release();
 
 	for (int i = 0; i < 96; i++)
 	{
@@ -75,9 +80,11 @@ void Stage::Release()
 }
 
 void Stage::Render() {
+	BackGround.Render();
 	mPlayer.Render();
 	mZombie.Render();
 	mLeopard.Render();
+	test.Render();
 
 	for (int i = 0; i < 96; i++)
 	{
@@ -102,9 +109,11 @@ void Stage::Render() {
 }
 
 void Stage::Transform() {
+	BackGround.Transform();
 	mPlayer.Transform();
 	mZombie.Transform();
 	mLeopard.Transform();
+	test.Transform();
 
 	for (int i = 0; i < 96; i++)
 	{
@@ -133,6 +142,7 @@ void Stage::Collide()
 	mPlayer.OnGround = false;
 	mZombie.OnGround = false;
 	mLeopard.OnGround = false;
+	test.CollidebyVector(mPlayer);
 
 	for (int i = 0; i < 96; i++)
 	{
@@ -180,6 +190,7 @@ void Stage::FrameMove()
 		{
 			mPlayer.mVelo.x = 0;			// 플레이어 속도 죽이기
 			mLeopard.mPos.x -= groundSpeed;
+			test.mPos.x -= groundSpeed;
 			for (int i = 0; i < 96; i++)
 			{
 				arrground[i].mPos.x -= groundSpeed;
@@ -208,6 +219,7 @@ void Stage::FrameMove()
 		{
 			mPlayer.mVelo.x = 0;			// 플레이어 속도 죽이기
 			mLeopard.mPos.x += groundSpeed;
+			test.mPos.x += groundSpeed;
 			for (int i = 0; i < 96; i++)
 			{
 				arrground[i].mPos.x += groundSpeed;

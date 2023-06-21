@@ -33,7 +33,7 @@ Vector2D Vector2D::operator/ (const Vector2D& v) const
 }
 void Vector2D::print() 
 {
-	std::cout << "(" << x << ", " << y << ")";
+	std::cout << "(" << x << ", " << y << ")" << '\n';
 }
 void Vector2D::operator +=(const Vector2D& v)
 {

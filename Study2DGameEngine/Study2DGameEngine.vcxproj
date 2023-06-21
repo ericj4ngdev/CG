@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\BackGround.cpp" />
     <ClCompile Include="Game\Color4f.cpp" />
     <ClCompile Include="Game\Enemy.cpp" />
     <ClCompile Include="Game\Ground.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="Game\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\BackGround.h" />
     <ClInclude Include="Game\Color4f.h" />
     <ClInclude Include="Game\Enemy.h" />
     <ClInclude Include="Game\Ground.h" />

@@ -85,6 +85,7 @@ void onIdle()
 
 int main(int argc, char** argv)
 {
+    
     glutInit(&argc, argv);
     g_Extern.WINDOWSIZE_WIDTH = 800;
     g_Extern.WINDOWSIZE_HEIGHT = 500;
@@ -96,6 +97,7 @@ int main(int argc, char** argv)
     glEnable(GL_TEXTURE_2D);
     init();
     glutDisplayFunc(display);
+    // PlaySound(L"Game/Sound/2-Vampire-Killer-_Courtyard_.wav", 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
     // 
     // int atexit(void (*func)(void));
     // 프로그램 종료하면 자원 해재 함수 Release함수 호출
@@ -104,7 +106,7 @@ int main(int argc, char** argv)
     // glutMouseFunc(onMouse);
     glutIdleFunc(onIdle);       // 실행중에도 계속 
     glutMainLoop();
-
+    _getch();
 
     return 0;
 }

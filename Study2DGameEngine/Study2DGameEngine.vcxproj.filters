@@ -72,6 +72,9 @@
     <ClCompile Include="Game\Texture.cpp">
       <Filter>소스 파일\Engine\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="Game\BackGround.cpp">
+      <Filter>소스 파일\Stage\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Color4f.h">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="Game\Texture.h">
       <Filter>소스 파일\Engine\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BackGround.h">
+      <Filter>소스 파일\Stage\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
