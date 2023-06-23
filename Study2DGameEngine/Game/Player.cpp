@@ -1,6 +1,7 @@
 #include "Include.h"
 DWORD startTime = 0; // 시작 시간을 저장하는 변수
-
+DWORD currentTime = 0;
+int gap = 0;
 void Player::initPos() {
 	mPos = Vector2D(150, 850/2);		// 초기위치
 	mVelo = Vector2D(3, 3);
@@ -38,11 +39,13 @@ void Player::initTexture(const char *name) {
 	isAttack = true;
 	isJump = true;
 	isSit = true;
+	isDown = false;
+	isAttackKeyDown = false;
 
 	isKeyDown = false;
 	isinc = true;
 	attackRange = 0;
-	keydownCount = 0;
+	
 	count = 0;
 	direction = 1;
 }
@@ -204,24 +207,24 @@ void Player::Walk(int x) {
 void Player::InputWalkKey()
 {
 	// 맨처음엔 isDown이 false이어서 입력 가능
-	if (KeyDown(VK_RIGHT) && !isKeyDown)
+	if (KeyDown(VK_RIGHT) && !isDown)
 	{
 		direction = 1;
 		startTime = GetTickCount64();     // 누른 시점
 		isIdle = false;
 		isWalk = true;
-		isKeyDown = true;
+		isDown = true;
 	}
 	else isIdle = true;
 
-	if (KeyDown(VK_LEFT) && !isKeyDown)
+	if (KeyDown(VK_LEFT) && !isDown)
 	{
 		direction = -1;
 		// glScalef(mSize.x, mSize.y, 1);
 		startTime = GetTickCount64();     // 누른 시점
 		isIdle = false;
 		isWalk = true;
-		isKeyDown = true;
+		isDown = true;
 	}
 	else isIdle = true;
 
@@ -230,14 +233,14 @@ void Player::InputWalkKey()
 	{ 
 		isWalk = false; 
 		isIdle = true;  
-		isKeyDown = false;  
+		isDown = false;
 		count = 0;
 	}
 
 	DWORD currentTime = GetTickCount64();         // 시스템 시간 
 
 	// 눌리면 실행
-	if (isKeyDown)
+	if (isDown)
 	{
 		// 애니메이션 전환부
 		if ((currentTime - startTime) >= 120)     // 0.2초
@@ -247,7 +250,7 @@ void Player::InputWalkKey()
 			if (isinc) count++;
 			else count--;
 			// 전환 후, 다시 입력 가능
-			isKeyDown = false;
+			isDown = false;
 		}
 	}
 	// 눌렸다면 0.2초간 startTime 은 고정    
@@ -255,7 +258,7 @@ void Player::InputWalkKey()
 	Walk(count);
 }
 
-void Player::Attack(int x)
+void Player::Attack()
 {
 	static GLfloat n[6][3] =
 	{
@@ -282,74 +285,51 @@ void Player::Attack(int x)
 	v[0][2] = v[3][2] = v[4][2] = v[7][2] = -0.5;
 	v[1][2] = v[2][2] = v[5][2] = v[6][2] = 0.5;
 
+	// 매프레임마다 체크
+	DWORD currentTime = GetTickCount64();
+	int gap = currentTime - startTime;
+	printf("c : %d   s : %d 차이 : %d \n", currentTime, startTime, currentTime - startTime);
 	int i = 5;
 	glBegin(GL_POLYGON);
-	glNormal3fv(&n[i][0]);					// 현재 면의 법선 벡터를 설정
-	if (x == 2) // 채찍
-	{	
+	glNormal3fv(&n[i][0]);
+
+	if (gap >= 100)
+	{
+		if (count == 0) count++;
+		else { count = 0; count++; }
+	}
+	if (gap >= 200) { count++;  }
+	if (gap >= 400)
+	{
+		// 제자리
+		isAttackKeyDown = false;
+		isAttack = false;
+	}
+
+	if (count == 2) // 채찍
+	{
 		v[0][0] = v[1][0] = v[2][0] = v[3][0] = -2.5;
 		v[4][0] = v[5][0] = v[6][0] = v[7][0] = 0.5;
 		// 자를 위치 조정
-		glTexCoord2f(92 / 433.0, 1 - (154 / 742.0));     glVertex3fv(&v[faces[i][0]][0]);      // 왼쪽 아래    
-		glTexCoord2f(92 / 433.0, 1 - (186 / 742.0));     glVertex3fv(&v[faces[i][1]][0]);      // 왼쪽 위
-		glTexCoord2f(142 / 433.0, 1 - (186 / 742.0));    glVertex3fv(&v[faces[i][2]][0]);       // 오른쪽 위
-		glTexCoord2f(142 / 433.0, 1 - (154 / 742.0));    glVertex3fv(&v[faces[i][3]][0]);       // 오른쪽 아래
+		glTexCoord2f(92 / 433.0, 1 - (154 / 742.0));     glVertex3fv(&v[faces[i][0]][0]); 
+		glTexCoord2f(92 / 433.0, 1 - (186 / 742.0));     glVertex3fv(&v[faces[i][1]][0]);
+		glTexCoord2f(142 / 433.0, 1 - (186 / 742.0));    glVertex3fv(&v[faces[i][2]][0]);
+		glTexCoord2f(142 / 433.0, 1 - (154 / 742.0));    glVertex3fv(&v[faces[i][3]][0]);
 	}
 	else
 	{
 		v[0][0] = v[1][0] = v[2][0] = v[3][0] = -0.5;
 		v[4][0] = v[5][0] = v[6][0] = v[7][0] = 1.5;
-		glTexCoord2f((1 + 40 * x) / 433.0, 1 - (154 / 742.0));    glVertex3fv(&v[faces[i][0]][0]);      // 왼쪽 아래    
-		glTexCoord2f((1 + 40 * x) / 433.0, 1 - (186 / 742.0));    glVertex3fv(&v[faces[i][1]][0]);      // 왼쪽 위
-		glTexCoord2f((33 + 40 * x) / 433.0, 1 - (186 / 742.0));   glVertex3fv(&v[faces[i][2]][0]);        // 오른쪽 위
-		glTexCoord2f((33 + 40 * x) / 433.0, 1 - (154 / 742.0));   glVertex3fv(&v[faces[i][3]][0]);        // 오른쪽 아래
+		glTexCoord2f((1 + 40 * count) / 433.0, 1 - (154 / 742.0));    glVertex3fv(&v[faces[i][0]][0]);
+		glTexCoord2f((1 + 40 * count) / 433.0, 1 - (186 / 742.0));    glVertex3fv(&v[faces[i][1]][0]);
+		glTexCoord2f((33 + 40 * count) / 433.0, 1 - (186 / 742.0));   glVertex3fv(&v[faces[i][2]][0]);
+		glTexCoord2f((33 + 40 * count) / 433.0, 1 - (154 / 742.0));   glVertex3fv(&v[faces[i][3]][0]);
 	}
+
 
 	glEnd();
 }	
 
-void Player::InputAttackKey() {
-	if ((KeyDown('Z') || KeyDown('z')) && !isKeyDown)
-	{
-		// mPos.x = mPos.x - 10;
-		startTime = GetTickCount64();      // 누른 시점
-		isIdle = false;
-		isAttack = true;
-		isKeyDown = true;		
-	}
-	else isIdle = true;
-
-	// 입력 종료코드
-	if (!(KeyDown('Z') || KeyDown('z')))
-	{
-		count = 0;
-	}
-
-	DWORD currentTime = GetTickCount64();
-	int gap = currentTime - startTime;
-	// 0.2초 뒤에 다음 장면 재생
-	// 누르는 동안 isDown은 true이므로 누르는 동안에만 재생
-	if (isKeyDown)
-	{
-		// printf("c : %d   s : %d 차이 : %d \n", currentTime, startTime, currentTime - startTime);
-		// 애니메이션 전환부
-		if (gap >= 100)     // 0.2초동안 계속 증가해서 슬랩스틱이 되었다..
-		{
-			if (count == 0) count++;
-		}
-		if (gap >= 200) {
-			if (count == 1) count++;
-		}
-		// 0.6초 뒤에 false로 바꿔줌으로써 한번 누르면 자동으로 3장면이 재생되게 함
-		if (gap >= 400)
-		{
-			if (count == 2) count = 0;
-			isKeyDown = false;
-			isAttack = false;
-		}
-	}
-	Attack(count);
-}
 
 void Player::Jump()
 {
@@ -390,38 +370,6 @@ void Player::Jump()
 	glTexCoord2f(266 / 433.0, 1 - (118 / 742.0));   glVertex3fv(&v[faces[i][3]][0]);        // 오른쪽 아래
 
 	glEnd();
-}
-
-void Player::InputJumpKey() {
-	// 누르고서 반응
-	if (isKeyDown)
-	{
-		// 땅 위면 점프모션 해제
-		// OnGround = false이면 jump모션 재생		
-		// std::cout << "InputJumpKey, if문 밖 " << OnGround << '\n';		// 1
-		if (OnGround) 
-		{
-			isKeyDown = false;		// 착지하면 false되서 다시 입력 가능
-			isJump = false;		// switch문에서 IDLE로 바뀜. 	
-			// 이거 지우면 서있는 상태로 점프함. 왜그런지 나도 모름. 씨발... 
-			// 계속 누르고 있다면 isDown이 해결해야 하는데 그러지 못한다. 
-			// 그게 문제
-			// 또 변수 만들자고??
-			// std::cout << "InputJumpKey, if문 안 " << OnGround << '\n';		// 1
-		}
-		Jump();
-	}
-
-	// if (!KeyDown(VK_SPACE)) isDown = false;
-
-	//누르고 있으면 T && F
-	if (KeyDown(VK_SPACE) && !isKeyDown)
-	{
-		isJump = true;
-		isKeyDown = true;
-		// std::cout << "InputJumpKey, 첫번쨰 if문 " << OnGround << '\n';		// 0
-		Jump();
-	}
 }
 
 void Player::Sit()
@@ -479,7 +427,7 @@ void Player::InputSitKey() {
 
 void Player::StateMachine()
 {
-	// printf("%d", currentState);
+	// printf("%d", OnGround);
 	// printf("%d", count);
 	switch (currentState) {
 		case IDLE:
@@ -494,19 +442,13 @@ void Player::StateMachine()
 			}
 			break;
 		case ATTACK:
-			InputAttackKey();
-			DrawCollide();
-			if (!isAttack) 
-			{
-				currentState = IDLE;
-			}
+			Attack();
+			// DrawCollide();
+			if (!isAttack) { currentState = IDLE; }
 			break;
 		case JUMP:
-			InputJumpKey();
-			if (!isJump) 
-			{
-				currentState = IDLE;
-			}
+			Jump();
+			if (!isJump) { currentState = IDLE; }
 			break;
 		case SIT:
 			InputSitKey();
@@ -522,7 +464,10 @@ void Player::StateMachine()
 }
 
 void Player::InputController()
-{
+{	
+	currentTime = GetTickCount64();		// 계속 갱신
+	gap = currentTime - startTime;	// 시간 계산	
+
 	mPos.y += gravity - JumpPower;
 	if (JumpPower > 0)
 		JumpPower -= 0.5f;		// 매 프레임마다 순차적으로 뺴준다. 
@@ -541,22 +486,49 @@ void Player::InputController()
 		mPos.x += mVelo.x;
 	}
 
-	// 땅 위에 있음 & space => 점프
-	// printf("%d", OnGround);
-	if (KeyDown(VK_SPACE) && OnGround) {
-		currentState = JUMP;
-		JumpPower = 15;
-	}
-	if (KeyDown('Z') || KeyDown('z'))
+	// 점프
+	if (OnGround) isJump = false;
+	if (!OnGround) currentState = JUMP;			// 공중이면 점프상태모션 유지
+	if (KeyDown(VK_SPACE) && OnGround)
 	{
-		currentState = ATTACK;
-		attackRange = 100;
+		if (isKeyDown)		// 재생이 다 끝났는가? = isAttack이 false인가
+		{
+			currentState = JUMP;
+			JumpPower = 15;
+			isKeyDown = false;
+			isJump = true;
+		}
+	}
+	if (KeyUp(VK_SPACE)) 
+	{
+		isKeyDown = true;
+		isJump = false;
 	}
 
-	if (KeyUp('Z') || KeyUp('z'))
+	// 공격
+	if (KeyDown('Z'))
 	{
-		attackRange = 0;
+		// 떼고 있으면 true, 누르면 false
+		if (isAttackKeyDown)
+		{
+			currentState = ATTACK;
+			startTime = GetTickCount64();
+			attackRange = 100;
+			isAttackKeyDown = false;		
+			isAttack = true;
+		}
 	}
+	// 떼면 true
+	if (KeyUp('Z')) {
+		isAttackKeyDown = true;
+		isAttack = false;
+		attackRange = 0;
+		count = 0;
+	}
+	// 1초 후엔 출력 
+	if (gap <= 400) currentState = ATTACK;
+	else isAttack = false;		// 0.4초 후엔 복귀
+
 
 	if (KeyDown(VK_DOWN))
 	{
@@ -593,7 +565,7 @@ void Player::DrawCollide(Sprite& other)
 {
 	Vector2D weaponPos(mPos.x + 100, mPos.y);
 	Vector2D weaponSize(0, mSize.y / 4);
-	weaponPos.print();
+	// weaponPos.print();
 
 	float Top = weaponPos.y - weaponSize.y / 2;
 	float Bottom = weaponPos.y + weaponSize.y / 2;

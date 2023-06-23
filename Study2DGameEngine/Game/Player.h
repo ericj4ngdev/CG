@@ -22,10 +22,12 @@ public:
 	bool isAttack;
 	bool isJump;
 	bool isSit;
+	bool isDown;
 	bool isKeyDown;
+	bool isAttackKeyDown;
 	bool isinc;
 	int attackRange;
-	int keydownCount;
+	DWORD startTime;
 	int count;
 	int direction;
 
@@ -42,13 +44,11 @@ public:
 public:
 	void Idle();
 	void Walk(int x);
-	void Attack(int x);
+	void Attack();
 	void Jump();
 	void Sit();
 public:
 	void InputWalkKey();
-	void InputAttackKey();
-	void InputJumpKey();
 	void InputSitKey();
 	void StateMachine();
 public:
