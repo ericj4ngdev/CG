@@ -4,8 +4,9 @@ WindowSize g_Extern;
 Stage* mStage = NULL;
 
 #pragma region mStage
-// mStage 초기화
-void init() {
+// mStage 초기화, 각 객체들의 초기화가 이루어진다. 
+void init() 
+{
     if (mStage == NULL)
     {
         mStage = new Stage();
@@ -14,39 +15,47 @@ void init() {
 }
 
 // mStage 그리기
-void Render() {
-    if (mStage != NULL) {
+void Render() 
+{
+    if (mStage != NULL) 
+    {
         mStage->Render();
     }
 }
 // 위치 정보 갱신
-void Transform() {
+void Transform() 
+{
     if (mStage != NULL) {
         mStage->Transform();
     }
 }
 
 // mStage 자원 해제
-void Release() {
-    if (mStage != NULL) {
+void Release() 
+{
+    if (mStage != NULL) 
+    {
         mStage->Release();
         delete mStage;
         mStage = NULL;
     }
 }
 
-void Collide() {
+void Collide() 
+{
     if (mStage != NULL) {
         mStage->Collide();
     }
 }
 
 // mStage 이동
-void FrameMove() {
+void FrameMove() 
+{
     if (mStage != NULL) {
         mStage->FrameMove();
     }
 }
+
 #pragma endregion
 
 // 각 sprite 의 render와 move 담당
@@ -84,8 +93,7 @@ void onIdle()
 
 
 int main(int argc, char** argv)
-{
-    
+{    
     glutInit(&argc, argv);
     g_Extern.WINDOWSIZE_WIDTH = 800;
     g_Extern.WINDOWSIZE_HEIGHT = 500;
@@ -97,16 +105,15 @@ int main(int argc, char** argv)
     glEnable(GL_TEXTURE_2D);
     init();
     glutDisplayFunc(display);
-    // PlaySound(L"Game/Sound/2-Vampire-Killer-_Courtyard_.wav", 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-    // 
-    // int atexit(void (*func)(void));
+    int atexit(void (*func)(void));
     // 프로그램 종료하면 자원 해재 함수 Release함수 호출
     // func는 함수 포인터. 반환값은 등록시 0, 실패시 -1 반환
     atexit(Release);
     // glutMouseFunc(onMouse);
     glutIdleFunc(onIdle);       // 실행중에도 계속 
     glutMainLoop();
-    _getch();
+    
 
     return 0;
-}
+} 
+ 

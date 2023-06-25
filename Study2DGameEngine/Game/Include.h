@@ -1,10 +1,8 @@
 // 필요한 헤더 파일, 전역 변수 저장소
 #ifndef O_H_
 #define O_H_
-// #include "Include/glut.h"
 
-#pragma comment(lib,"glut32.lib") 
-#pragma comment(lib,"winmm.lib")
+#pragma comment(lib,"glut32.lib")
 
 #include <stdlib.h>
 #include <cmath>

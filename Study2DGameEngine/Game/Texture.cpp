@@ -10,14 +10,14 @@ Vector2D Texture::GetSize()
 void Texture::LoadImage(const char* texFile)
 {
     // LoadMeshFromFile
-    GLuint texture;
+    // GLuint texture;
     int width, height;
 
-    glGenTextures(1, &texture);
+    glGenTextures(1, &m_gridTexture);
     FILE* fp = NULL;
     if (fopen_s(&fp, texFile, "rb"))
     {
-        printf("ERROR : No %s. \n fail to bind %d\n", texFile, texture);
+        printf("ERROR : No %s. \n fail to bind %d\n", texFile, m_gridTexture);
         return;
     }
 

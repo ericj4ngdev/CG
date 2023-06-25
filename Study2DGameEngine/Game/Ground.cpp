@@ -111,22 +111,27 @@ bool Ground::CollidebyVector(Sprite& other)
 
 	if (OnCollide)
 	{
+		if (PushVector.x > 1) PushVector.x = 1;
+		if (PushVector.x < -1) PushVector.x = -1;
+		if (PushVector.y > 1) PushVector.y = 1;
+		if (PushVector.y < -1) PushVector.y = -1;
+
 		if (fabs(PushVector.x) > fabs(PushVector.y)) {
 			other.mPos.x += PushVector.x;
-			other.OnGround = false;
+			other.OnGround = false;		// 옆면 처리
 		}
 		else {
 			other.mPos.y += PushVector.y - 4;		// 4는 player의 gravity이다. 
-			other.OnGround = true;
+			other.OnGround = true;		// 
 		}
-						// player의 OnGround 변수를 바꾼다. 
+		// player의 OnGround 변수를 바꾼다. 
 		// if(other.OnGround) PushVector.print();
 		// printf(other.OnGround);
 		other.Transform();
 		return true;
 	}
 
-	// other.OnGround = (false || other.OnGround);
+	other.OnGround = (false || other.OnGround);
 	return false; // 충돌 하지 않음.
 }
 
@@ -140,7 +145,9 @@ void Ground::cal(Vector2D v1, Vector2D v2, Vector2D v3, Vector2D v4, Vector2D& c
 
 	num = ((v3.x - v1.x) * (v4.y - v3.y)) - ((v4.x - v3.x) * (v3.y - v1.y));
 	den = ((v2.x - v1.x) * (v4.y - v3.y)) - ((v4.x - v3.x) * (v2.y - v1.y));
-	t = num / den;
+	// if (den != 0) 
+	t = num / den;	// 무한 방지
+	// else t = 1;
 	if (t <= 1 && t > 0 && ab <= 0 && cd <= 0)
 	{
 		// std::cout << t;

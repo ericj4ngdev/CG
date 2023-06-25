@@ -1,6 +1,7 @@
 #include "Include.h"
-DWORD startTime = 0; // 시작 시간을 저장하는 변수
+// DWORD startTime = 0; // 시작 시간을 저장하는 변수
 DWORD currentTime = 0;
+DWORD start = 0;
 int gap = 0;
 void Player::initPos() {
 	mPos = Vector2D(150, 850/2);		// 초기위치
@@ -52,7 +53,7 @@ void Player::initTexture(const char *name) {
 
 void Player::Transform()
 {
-	// printf("%f , %f  ", mPos.x, mPos.y);
+	printf("%f , %f  \n", mPos.x, mPos.y);
 	mTop = mPos.y - mSize.y / 2;
 	mBottom = mPos.y + mSize.y / 2;
 	mRight = mPos.x + mSize.x / 2;
@@ -206,11 +207,12 @@ void Player::Walk(int x) {
 
 void Player::InputWalkKey()
 {
+	
 	// 맨처음엔 isDown이 false이어서 입력 가능
 	if (KeyDown(VK_RIGHT) && !isDown)
 	{
 		direction = 1;
-		startTime = GetTickCount64();     // 누른 시점
+		start = GetTickCount64();     // 누른 시점
 		isIdle = false;
 		isWalk = true;
 		isDown = true;
@@ -221,7 +223,7 @@ void Player::InputWalkKey()
 	{
 		direction = -1;
 		// glScalef(mSize.x, mSize.y, 1);
-		startTime = GetTickCount64();     // 누른 시점
+		start = GetTickCount64();     // 누른 시점
 		isIdle = false;
 		isWalk = true;
 		isDown = true;
@@ -237,13 +239,13 @@ void Player::InputWalkKey()
 		count = 0;
 	}
 
-	DWORD currentTime = GetTickCount64();         // 시스템 시간 
+	// DWORD currentTime = GetTickCount64();         // 시스템 시간 
 
 	// 눌리면 실행
 	if (isDown)
 	{
 		// 애니메이션 전환부
-		if ((currentTime - startTime) >= 120)     // 0.2초
+		if ((currentTime - start) >= 120)     // 0.2초
 		{
 			if (count == 0) { isinc = true; }
 			if (count == 2) { isinc = false; }
@@ -329,7 +331,6 @@ void Player::Attack()
 
 	glEnd();
 }	
-
 
 void Player::Jump()
 {
@@ -427,23 +428,18 @@ void Player::InputSitKey() {
 
 void Player::StateMachine()
 {
-	// printf("%d", OnGround);
-	// printf("%d", count);
-	switch (currentState) {
+	switch (currentState) 
+	{
 		case IDLE:
 			attackRange = 0;
 			Idle();
 			break;
 		case WALK:
 			InputWalkKey();
-			if (!isWalk) 
-			{
-				currentState = IDLE;
-			}
+			if (!isWalk) { currentState = IDLE; }
 			break;
 		case ATTACK:
 			Attack();
-			// DrawCollide();
 			if (!isAttack) { currentState = IDLE; }
 			break;
 		case JUMP:
@@ -452,10 +448,7 @@ void Player::StateMachine()
 			break;
 		case SIT:
 			InputSitKey();
-			if (!isSit) 
-			{
-				currentState = IDLE;
-			}
+			if (!isSit) { currentState = IDLE; }
 			break;
 		default:
 			std::cout << "Invalid state" << std::endl;
@@ -465,7 +458,7 @@ void Player::StateMachine()
 
 void Player::InputController()
 {	
-	currentTime = GetTickCount64();		// 계속 갱신
+	DWORD currentTime = GetTickCount64();		// 계속 갱신
 	gap = currentTime - startTime;	// 시간 계산	
 
 	mPos.y += gravity - JumpPower;
@@ -477,7 +470,7 @@ void Player::InputController()
 	if (KeyDown(VK_LEFT))
 	{
 		currentState = WALK;
-		mPos.x -= mVelo.x;		
+		mPos.x -= mVelo.x;
 	}
 
 	if (KeyDown(VK_RIGHT))
